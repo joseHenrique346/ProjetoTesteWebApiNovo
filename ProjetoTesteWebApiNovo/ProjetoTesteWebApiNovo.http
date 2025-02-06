@@ -1,0 +1,6 @@
+@ProjetoTesteWebApiNovo_HostAddress = http://localhost:5218
+
+GET {{ProjetoTesteWebApiNovo_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
