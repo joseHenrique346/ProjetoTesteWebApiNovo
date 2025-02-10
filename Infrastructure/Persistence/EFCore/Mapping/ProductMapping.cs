@@ -12,10 +12,6 @@ namespace Infrastructure.Persistence.EFCore.Mapping
             builder.HasOne(i => i.Brand).WithMany(j => j.ListProduct).HasForeignKey(k => k.BrandId).HasConstraintName("fkey_id_marca");
             builder.HasOne(i => i.Category).WithMany(j => j.ListProduct).HasForeignKey(k => k.CategoryId).HasConstraintName("fkey_id_categoria");
 
-            builder.Property(i => i.Name).HasColumnName("nome");
-            builder.Property(i => i.Name).IsRequired();
-            builder.Property(i => i.Name).HasMaxLength(40);
-
             builder.Property(i => i.Code).HasColumnName("código");
             builder.Property(i => i.Code).IsRequired();
             builder.Property(i => i.Code).HasMaxLength(6);

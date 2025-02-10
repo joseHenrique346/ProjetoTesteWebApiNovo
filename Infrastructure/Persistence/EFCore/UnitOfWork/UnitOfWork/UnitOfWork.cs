@@ -30,7 +30,7 @@ namespace Infrastructure.Persistence.EFCore.UnitOfWork.UnitOfWork
             catch (Exception ex)
             {
                 dbContextTransaction?.Rollback();
-                throw; 
+                throw;
             }
             finally
             {

@@ -1,11 +1,12 @@
-﻿using Infrastructure.Persistence.EFCore.Entity.Base;
+﻿using Domain.DTO.Base;
 
-namespace Infrastructure.Persistence.EFCore.Entity.Registration
+namespace Domain.DTO.Entity
 {
-    public class Product : BaseEntity
+    public class ProductDTO : BaseDTO
     {
         #region Properties
 
+        public string Name { get; set; }
         public string Code { get; set; }
         public string Description { get; set; }
         public long BrandId { get; set; }
@@ -15,8 +16,9 @@ namespace Infrastructure.Persistence.EFCore.Entity.Registration
         #endregion
 
         #region Constructors
-        public Product(string code, string description, long brandId, long categoryId, decimal price, long stock)
+        public ProductDTO(string name, string code, string description, long brandId, long categoryId, decimal price, long stock)
         {
+            Name = name;
             Code = code;
             Description = description;
             BrandId = brandId;
@@ -24,13 +26,13 @@ namespace Infrastructure.Persistence.EFCore.Entity.Registration
             Price = price;
             Stock = stock;
         }
-        public Product() { }
+        public ProductDTO() { }
         #endregion
 
         #region Internal
 
-        public virtual Brand? Brand { get; set; }
-        public virtual Category? Category { get; set; }
+        public virtual BrandDTO? BrandDTO { get; set; }
+        public virtual CategoryDTO? CategoryDTO { get; set; }
 
         #endregion
     }

@@ -1,8 +1,8 @@
-﻿using Infrastructure.Persistence.EFCore.Entity.Base;
+﻿using Domain.DTO.Base;
 
-namespace Infrastructure.Persistence.EFCore.Entity.Registration
+namespace Domain.DTO.Entity
 {
-    public class Customer : BaseEntity
+    public class CustomerDTO : BaseDTO
     {
         #region Properties
 
@@ -17,7 +17,7 @@ namespace Infrastructure.Persistence.EFCore.Entity.Registration
 
         #region Constructors
 
-        public Customer(string firstName, string lastName, string code, string phone, DateOnly? birthDate, string document)
+        public CustomerDTO(string firstName, string lastName, string code, string phone, DateOnly? birthDate, string document)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -27,13 +27,13 @@ namespace Infrastructure.Persistence.EFCore.Entity.Registration
             Document = document;
         }
 
-        public Customer() { }
+        public CustomerDTO() { }
 
         #endregion
 
         #region Internal
 
-        public virtual List<CustomerAddress> ListCustomerAddress { get; set; }
+        public virtual List<CustomerAddressDTO> ListCustomerAddressDTO { get; set; }
 
         #endregion
     }

@@ -1,12 +1,14 @@
-﻿namespace Domain.Interface.Base
+﻿using Domain.DTO.Base;
+
+namespace Domain.Interface.Base
 {
-    public interface IBaseRepository<TEntity> where TEntity : class
+    public interface IBaseRepository<TDTO> where TDTO : BaseDTO
     {
-        Task<List<TEntity>> GetAll();
-        Task<List<TEntity>> GetListByListId(List<long> id);
-        Task<TEntity?> GetById(long? id);
-        Task<List<TEntity>> Create(List<TEntity> listEntity);
-        Task<List<TEntity>> Update(List<TEntity> listEntity);
-        Task<bool> Delete(List<TEntity> listEntity);
+        Task<List<TDTO>> GetAll();
+        Task<List<TDTO>> GetListByListId(List<long> id);
+        Task<TDTO?> GetById(long? id);
+        Task<List<TDTO>> Create(List<TDTO> listEntity);
+        Task<List<TDTO>> Update(List<TDTO> listEntity);
+        Task<bool> Delete(List<TDTO> listEntity);
     }
 }

@@ -11,9 +11,6 @@ namespace Infrastructure.Persistence.EFCore.Mapping
             builder.ToTable("marca");
 
             builder.HasKey(i => i.Id).HasName("id");
-            builder.Property(i => i.Name).HasColumnName("nome");
-            builder.Property(i => i.Name).IsRequired();
-            builder.Property(i => i.Name).HasMaxLength(40);
 
             builder.Property(i => i.Code).HasColumnName("código");
             builder.Property(i => i.Code).IsRequired();
@@ -21,7 +18,7 @@ namespace Infrastructure.Persistence.EFCore.Mapping
 
             builder.Property(i => i.Description).HasColumnName("descrição");
             builder.Property(i => i.Description).IsRequired();
-            builder.Property(i => i.Description).HasMaxLength(100); 
+            builder.Property(i => i.Description).HasMaxLength(100);
         }
     }
 }

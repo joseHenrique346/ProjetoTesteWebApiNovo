@@ -11,9 +11,13 @@ namespace Infrastructure.Persistence.EFCore.Mapping
             builder.HasKey(i => i.Id).HasName("id");
             builder.HasMany(i => i.ListCustomerAddress).WithOne(j => j.Customer).HasForeignKey(k => k.CustomerId);
 
-            builder.Property(i => i.Name).HasColumnName("nome");
-            builder.Property(i => i.Name).IsRequired();
-            builder.Property(i => i.Name).HasMaxLength(40);
+            builder.Property(i => i.FirstName).HasColumnName("primeiro_nome");
+            builder.Property(i => i.FirstName).IsRequired();
+            builder.Property(i => i.FirstName).HasMaxLength(100);
+
+            builder.Property(i => i.FirstName).HasColumnName("sobrenome");
+            builder.Property(i => i.FirstName).IsRequired();
+            builder.Property(i => i.FirstName).HasMaxLength(100);
 
             builder.Property(i => i.Code).HasColumnName("código");
             builder.Property(i => i.Code).IsRequired();
