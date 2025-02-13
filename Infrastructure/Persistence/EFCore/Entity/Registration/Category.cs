@@ -12,9 +12,8 @@ namespace Infrastructure.Persistence.EFCore.Entity.Registration
         #endregion
 
         #region Constructors
-        public Category(string name, string code, string description, List<Product> listProduct)
+        public Category(string code, string description, List<Product> listProduct)
         {
-            Name = name;
             Code = code;
             Description = description;
             ListProduct = listProduct;
