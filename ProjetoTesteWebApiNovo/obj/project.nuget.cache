@@ -1,10 +1,9 @@
 {
   "version": 2,
-  "dgSpecHash": "bxiy7M0IfFk=",
+  "dgSpecHash": "NRJdKfXdgYY=",
   "success": true,
   "projectFilePath": "C:\\Users\\josef\\source\\repos\\ProjetoTesteWebApiNovo\\ProjetoTesteWebApiNovo\\ProjetoTesteWebApiNovo.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\josef\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\josef\\.nuget\\packages\\microsoft.entityframeworkcore\\8.0.0\\microsoft.entityframeworkcore.8.0.0.nupkg.sha512",
     "C:\\Users\\josef\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\8.0.0\\microsoft.entityframeworkcore.abstractions.8.0.0.nupkg.sha512",
     "C:\\Users\\josef\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\8.0.0\\microsoft.entityframeworkcore.analyzers.8.0.0.nupkg.sha512",

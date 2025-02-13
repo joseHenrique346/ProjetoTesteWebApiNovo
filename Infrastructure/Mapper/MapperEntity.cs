@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using Domain.DTO.Entity;
-using Infrastructure.Persistence.EFCore.Entity.Registration;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace Infrastructure.Mapper
 {
@@ -38,16 +35,4 @@ namespace Infrastructure.Mapper
                     select conv).ToList();
         }
     }
-
-    //public class MapperEntity : Profile
-    //{
-    //    public MapperEntity()
-    //    {
-    //        CreateMap<Brand, BrandDTO>().ReverseMap();
-    //        CreateMap<Category, CategoryDTO>().ReverseMap();
-    //        CreateMap<Customer, CustomerDTO>().ReverseMap();
-    //        CreateMap<CustomerAddress, CustomerAddressDTO>().ReverseMap();
-    //        CreateMap<Product, ProductDTO>().ReverseMap();
-    //    }
-    //}
 }

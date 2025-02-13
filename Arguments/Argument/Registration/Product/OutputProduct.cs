@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace Arguments.Argument.Registration.Product
+﻿namespace Arguments.Argument.Registration.Product
 {
     public class OutputProduct(string code, string description, long brandId, long categoryId, decimal price, long stock)
     {

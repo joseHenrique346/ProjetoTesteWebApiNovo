@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Domain.DTO.Base;
+﻿using Domain.DTO.Base;
 using Domain.Interface.Base;
 using Infrastructure.Persistence.EFCore.Context;
 using Infrastructure.Persistence.EFCore.Entity.Base;

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ProjetoTesteWebApiNovo")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+53fe4a7220066bad193a0bc84c44cfc6e9a34c39")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+441b8e23e024702f1b6cf9547262b4b72adda5d7")]
 [assembly: System.Reflection.AssemblyProductAttribute("ProjetoTesteWebApiNovo")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ProjetoTesteWebApiNovo")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace Arguments.Argument.Registration.CustomerAddress
+﻿namespace Arguments.Argument.Registration.CustomerAddress
 {
     public class OutputCustomerAddres(string number, string street, string neighborhood, string postalCode)
     {
