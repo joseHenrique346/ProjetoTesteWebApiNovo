@@ -37,20 +37,19 @@ namespace Domain.Service.Base
         {
             var getById = await _repository.GetById(inputIdentityView);
             return getById.GenericConvert<TOutput, TDTO>();
-
         }
 
-        public virtual List<TOutput> Create(List<TInputCreate> listInputCreate)
+        public virtual List<TOutput> CreateMultiple(List<TInputCreate> listInputCreate)
         {
             throw new NotImplementedException();
         }
 
-        public virtual List<TOutput> Update(List<TInputIdentityUpdate> listInputIdentityUpdate)
+        public virtual List<TOutput> UpdateMultiple(List<TInputIdentityUpdate> listInputIdentityUpdate)
         {
             throw new NotImplementedException();
         }
 
-        public virtual bool Delete(List<TInputIdentityDelete> listInputIdentityDelete)
+        public virtual bool DeleteMultiple(List<TInputIdentityDelete> listInputIdentityDelete)
         {
             throw new NotImplementedException();
         }

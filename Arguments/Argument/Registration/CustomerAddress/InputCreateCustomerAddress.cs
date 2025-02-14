@@ -1,6 +1,8 @@
-﻿namespace Arguments.Argument.Registration.CustomerAddress
+﻿using Arguments.Argument.Base;
+
+namespace Arguments.Argument.Registration.CustomerAddress
 {
-    public class InputCreateCustomerAddress(long customerId, string street, string number, string? complement, string? reference, string neighborhood, string postalCode)
+    public class InputCreateCustomerAddress(long customerId, string street, string number, string? complement, string? reference, string neighborhood, string postalCode) : BaseInputCreate<InputCreateCustomerAddress>
     {
 
         public long CustomerId { get; private set; } = customerId;

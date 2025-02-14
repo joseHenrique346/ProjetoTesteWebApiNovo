@@ -1,10 +1,30 @@
-﻿namespace Arguments.Argument.Registration.Customer
+﻿using Arguments.Argument.Base;
+
+namespace Arguments.Argument.Registration.Customer
 {
-    public record OutputCustomer(string FirstName, string LastName, string Phone, string Document)
+    public class OutputCustomer : BaseOutput<OutputCustomer>
     {
-        public string FirstName { get; private set; } = FirstName;
-        public string LastName { get; private set; } = LastName;
-        public string Phone { get; private set; } = Phone;
-        public string Document { get; private set; } = Document;
+        #region Properties
+
+        public string FirstName { get; private set; }
+        public string LastName { get; private set; }
+        public string Phone { get; private set; }
+        public string Document { get; private set; }
+
+        #endregion
+
+        #region Constructors
+
+        public OutputCustomer(string firstName, string lastName, string phone, string document)
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            Phone = phone;
+            Document = document;
+        }
+
+        public OutputCustomer() { }
+
+        #endregion
     }
 }

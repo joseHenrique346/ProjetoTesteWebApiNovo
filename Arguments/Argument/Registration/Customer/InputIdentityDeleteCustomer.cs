@@ -1,6 +1,8 @@
-﻿namespace Arguments.Argument.Registration.Customer
+﻿using Arguments.Argument.Base;
+
+namespace Arguments.Argument.Registration.Customer
 {
-    public class InputIdentityDeleteCustomer
+    public class InputIdentityDeleteCustomer : BaseInputIdentityDelete<InputIdentityDeleteCustomer>
     {
         public long Id { get; private set; }
     }
