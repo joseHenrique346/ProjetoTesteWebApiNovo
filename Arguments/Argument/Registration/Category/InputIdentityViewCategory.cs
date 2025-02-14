@@ -1,6 +1,8 @@
-﻿namespace Arguments.Argument.Registration.Category
+﻿using Arguments.Argument.Base;
+
+namespace Arguments.Argument.Registration.Category
 {
-    public class InputIdentityViewCategory(long id)
+    public class InputIdentityViewCategory(long id) : BaseInputIdentityView<InputIdentityViewCategory>
     {
         public long Id { get; private set; } = id;
     }

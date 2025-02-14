@@ -1,7 +1,9 @@
-﻿using Domain.DTO.Entity;
+﻿using Arguments.Argument.Base;
+using Arguments.Argument.Registration.Product;
+using Domain.DTO.Entity;
 using Domain.Interface.Base;
 
 namespace Domain.Interface.Repository
 {
-    public interface IProductRepository : IBaseRepository<ProductDTO> { }
+    public interface IProductRepository : IBaseRepository<ProductDTO, InputIdentityViewProduct> { }
 }

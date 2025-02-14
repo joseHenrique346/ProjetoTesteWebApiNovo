@@ -11,9 +11,8 @@ namespace Infrastructure.Persistence.EFCore.Entity.Registration
         #endregion
 
         #region Constructors
-        public Brand(string name, string code, string description, List<Product> listProduct)
+        public Brand(string code, string description, List<Product> listProduct)
         {
-            Name = name;
             Code = code;
             Description = description;
             ListProduct = listProduct;

@@ -1,6 +1,8 @@
-﻿namespace Arguments.Argument.Registration.Customer
+﻿using Arguments.Argument.Base;
+
+namespace Arguments.Argument.Registration.Customer
 {
-    public class InputIdentityViewCustomer
+    public class InputIdentityViewCustomer : BaseInputIdentityView<InputIdentityViewCustomer>
     {
         public long Id { get; private set; }
     }
