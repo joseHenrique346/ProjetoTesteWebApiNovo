@@ -1,10 +1,11 @@
 ﻿using System.Reflection;
 
-namespace Arguments.Argument.Conversor
+namespace Arguments.Conversor
 {
     public static class Conversor
     {
         public static TOutput GenericConvert<TOutput, TInput>(this TInput input)
+            where TInput : class
             where TOutput : new()
         {
             TOutput output = new TOutput();
@@ -28,7 +29,7 @@ namespace Arguments.Argument.Conversor
             where TOutput : new()
         {
             return (from i in listInput
-                    select GenericConvert<TOutput, TInput>(i)).ToList();
+                    select i.GenericConvert<TOutput, TInput>()).ToList();
         }
     }
 }

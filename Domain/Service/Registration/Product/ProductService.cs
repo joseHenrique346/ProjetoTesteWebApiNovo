@@ -1,9 +1,8 @@
 ﻿using Arguments.Argument.Registration.Product;
 using Domain.DTO.Entity;
 using Domain.Interface.Repository;
-using Domain.Service.Base;
 
-namespace Domain.Service.Registration
+namespace Domain.Service.Registration.Product
 {
     public class ProductService : BaseService<ProductDTO, IProductRepository, InputIdentityViewProduct, InputCreateProduct, InputUpdateProduct, InputIdentityUpdateProduct, InputIdentityDeleteCustomer, OutputProduct>
     {

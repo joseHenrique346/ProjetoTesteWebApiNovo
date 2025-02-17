@@ -1,5 +1,5 @@
-﻿using Arguments.Argument.Conversor;
-using Arguments.Argument.Registration.Brand;
+﻿using Arguments.Argument.Registration.Brand;
+using Arguments.Conversor;
 using Domain.DTO.Entity;
 using Domain.Interface.Repository;
 using Infrastructure.Persistence.EFCore.Context;

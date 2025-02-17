@@ -1,9 +1,8 @@
 ﻿using Arguments.Argument.Registration.Category;
 using Domain.DTO.Entity;
 using Domain.Interface.Repository;
-using Domain.Service.Base;
 
-namespace Domain.Service.Registration
+namespace Domain.Service.Registration.Category
 {
     public class CategoryService : BaseService<CategoryDTO, ICategoryRepository, InputIdentityViewCategory, InputCreateCategory, InputUpdateCategory, InputIdentityUpdateCategory, InputIdentityDeleteCategory, OutputCategory>
     {

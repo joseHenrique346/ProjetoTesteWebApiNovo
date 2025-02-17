@@ -1,10 +1,10 @@
-﻿using Arguments.Argument.Base;
-using Arguments.Argument.Conversor;
+﻿using Arguments.Argument.Base.Crud;
+using Arguments.Conversor;
 using Domain.DTO.Base;
 using Domain.Interface.Base;
 namespace Domain.Service.Base
 {
-    public class BaseService<TDTO, TRepository, TInputIdentityView, TInputCreate, TInputUpdate, TInputIdentityUpdate, TInputIdentityDelete, TOutput>
+    public class BaseService<TDTO, TRepository, TInputIdentityView, TInputCreate, TInputUpdate, TInputIdentityUpdate, TInputIdentityDelete, TValidateDTO, TOutput> : BaseValidate<TValidateDTO>
         where TDTO : BaseDTO
         where TRepository : IBaseRepository<TDTO, TInputIdentityView>
         where TInputIdentityView : BaseInputIdentityView<TInputIdentityView>
@@ -12,6 +12,7 @@ namespace Domain.Service.Base
         where TInputUpdate : BaseInputUpdate<TInputUpdate>
         where TInputIdentityUpdate : BaseInputIdentityUpdate<TInputIdentityUpdate>
         where TInputIdentityDelete : BaseInputIdentityDelete<TInputIdentityDelete>
+        where TValidateDTO : BaseValidateDTO
         where TOutput : BaseOutput<TOutput>, new()
     {
         private readonly TRepository _repository;

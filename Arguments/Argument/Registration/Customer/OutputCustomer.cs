@@ -1,4 +1,4 @@
-﻿using Arguments.Argument.Base;
+﻿using Arguments.Argument.Base.Crud;
 
 namespace Arguments.Argument.Registration.Customer
 {
@@ -6,6 +6,7 @@ namespace Arguments.Argument.Registration.Customer
     {
         #region Properties
 
+        public long Id { get; private set; }
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
         public string Phone { get; private set; }

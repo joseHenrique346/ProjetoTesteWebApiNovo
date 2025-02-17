@@ -1,9 +1,8 @@
 ﻿using Arguments.Argument.Registration.CustomerAddress;
 using Domain.DTO.Entity;
 using Domain.Interface.Repository;
-using Domain.Service.Base;
 
-namespace Domain.Service.Registration
+namespace Domain.Service.Registration.CustomerAddress
 {
     public class CustomerAddressService : BaseService<CustomerAddressDTO, ICustomerAddressRepository, InputIdentityViewCustomerAddress, InputCreateCustomerAddress, InputUpdateCustomerAddress, InputIdentityUpdateCustomerAddress, InputIdentityDeleteCustomer, OutputCustomerAddres>
     {

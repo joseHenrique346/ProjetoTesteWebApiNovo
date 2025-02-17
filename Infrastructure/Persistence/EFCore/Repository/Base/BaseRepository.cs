@@ -1,8 +1,7 @@
-﻿using Arguments.Argument.Base;
-using Arguments.Argument.Conversor;
+﻿using Arguments.Argument.Base.Crud;
+using Arguments.Conversor;
 using Domain.DTO.Base;
 using Domain.Interface.Base;
-using Infrastructure.Mapper;
 using Infrastructure.Persistence.EFCore.Context;
 using Infrastructure.Persistence.EFCore.Entity.Base;
 using Microsoft.EntityFrameworkCore;

@@ -1,5 +1,4 @@
-﻿using Arguments.Argument.Base;
-using Arguments.Argument.Registration.Product;
+﻿using Arguments.Argument.Registration.Product;
 using Domain.DTO.Entity;
 using Domain.Interface.Base;
 

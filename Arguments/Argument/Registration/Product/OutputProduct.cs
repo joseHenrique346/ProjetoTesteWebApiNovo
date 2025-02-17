@@ -1,4 +1,4 @@
-﻿using Arguments.Argument.Base;
+﻿using Arguments.Argument.Base.Crud;
 
 namespace Arguments.Argument.Registration.Product
 {

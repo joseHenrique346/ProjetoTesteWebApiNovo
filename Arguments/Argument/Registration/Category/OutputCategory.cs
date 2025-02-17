@@ -1,4 +1,4 @@
-﻿using Arguments.Argument.Base;
+﻿using Arguments.Argument.Base.Crud;
 
 namespace Arguments.Argument.Registration.Category
 {
@@ -6,6 +6,7 @@ namespace Arguments.Argument.Registration.Category
     {
         #region Properties
 
+        public long Id { get; private set; }
         public string Description { get; private set; }
         public string Code { get; private set; }
 

@@ -1,4 +1,4 @@
-﻿using Arguments.Argument.Base;
+﻿using Arguments.Argument.Base.Crud;
 
 namespace Arguments.Argument.Registration.CustomerAddress
 {
@@ -6,6 +6,7 @@ namespace Arguments.Argument.Registration.CustomerAddress
     {
         #region Properties
 
+        public long Id { get; private set; }
         public string Number { get; private set; }
         public string Street { get; private set; }
         public string Neighborhood { get; private set; }
