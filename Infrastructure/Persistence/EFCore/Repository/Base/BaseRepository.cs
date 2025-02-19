@@ -33,7 +33,7 @@ namespace Infrastructure.Persistence.EFCore.Repository.Base
             var listEntity = await _dbSet.ToListAsync();
             return listEntity.GenericConvertList<TDTO, TEntity>();
         }
-        public async Task<List<TDTO>> GetListByListId(List<TInputIdentityView> listId)
+        public async Task<List<TDTO>> GetListByListId(List<long> listId)
         {
             var getList = (from i in listId
                            select _dbSet.Find(i)).ToList();

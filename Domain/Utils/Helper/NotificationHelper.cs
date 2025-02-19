@@ -9,8 +9,6 @@ namespace Domain.Utils.Helper
 
         public static void Add(string key, DetailedNotification detailedNotification)
         {
-            ListNotification.TryGetValue(key, out var value);
-
             var existingNotification = ListNotification.GetOrAdd(key, _ => []);
             var notification = existingNotification.FirstOrDefault();
             if (notification != null)

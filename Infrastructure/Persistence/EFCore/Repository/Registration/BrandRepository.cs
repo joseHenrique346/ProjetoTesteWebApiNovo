@@ -1,6 +1,6 @@
 ﻿using Arguments.Argument.Registration.Brand;
 using Arguments.Conversor;
-using Domain.DTO.Entity;
+using Domain.DTO.Entity.Brand;
 using Domain.Interface.Repository;
 using Infrastructure.Persistence.EFCore.Context;
 using Infrastructure.Persistence.EFCore.Entity.Registration;

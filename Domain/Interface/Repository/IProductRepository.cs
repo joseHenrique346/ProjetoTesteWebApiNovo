@@ -1,5 +1,5 @@
 ﻿using Arguments.Argument.Registration.Product;
-using Domain.DTO.Entity;
+using Domain.DTO.Entity.Product;
 using Domain.Interface.Base;
 
 namespace Domain.Interface.Repository

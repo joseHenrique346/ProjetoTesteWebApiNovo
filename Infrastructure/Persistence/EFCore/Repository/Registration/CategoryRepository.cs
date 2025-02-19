@@ -1,5 +1,5 @@
 ﻿using Arguments.Argument.Registration.Category;
-using Domain.DTO.Entity;
+using Domain.DTO.Entity.Category;
 using Domain.Interface.Repository;
 using Infrastructure.Persistence.EFCore.Context;
 using Infrastructure.Persistence.EFCore.Entity.Registration;

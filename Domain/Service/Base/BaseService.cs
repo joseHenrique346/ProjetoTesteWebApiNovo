@@ -1,4 +1,6 @@
-﻿using Arguments.Argument.Base.Crud;
+﻿using Arguments.Argument.Base.ApiResponse;
+using Arguments.Argument.Base.Crud;
+using Arguments.Argument.Registration.Brand;
 using Arguments.Conversor;
 using Domain.DTO.Base;
 using Domain.Interface.Base;
@@ -22,35 +24,32 @@ namespace Domain.Service.Base
             _repository = repository;
         }
 
-        public virtual async Task<List<TOutput>> GetAll()
+        public virtual async Task<List<TDTO>> GetAll()
         {
-            var getAll = await _repository.GetAll();
-            return getAll.GenericConvertList<TOutput, TDTO>();
+            return await _repository.GetAll();
         }
 
-        public virtual async Task<List<TOutput>> GetListByListId(List<TInputIdentityView> listInputIdentityView)
+        public virtual async Task<List<TDTO>> GetListByListId(List<long> listInputIdentityView)
         {
-            var getListById = await _repository.GetListByListId(listInputIdentityView);
-            return getListById.GenericConvertList<TOutput, TDTO>();
+            return await _repository.GetListByListId(listInputIdentityView);
         }
 
-        public virtual async Task<TOutput> GetById(TInputIdentityView inputIdentityView)
+        public virtual async Task<TDTO?> GetById(TInputIdentityView inputIdentityView)
         {
-            var getById = await _repository.GetById(inputIdentityView);
-            return getById.GenericConvert<TOutput, TDTO>();
+            return await _repository.GetById(inputIdentityView);
         }
 
-        public virtual List<TOutput> CreateMultiple(List<TInputCreate> listInputCreate)
+        public virtual async Task<BaseResult<List<TOutput>>> CreateMultiple(List<TInputCreate> listInputCreate)
         {
             throw new NotImplementedException();
         }
 
-        public virtual List<TOutput> UpdateMultiple(List<TInputIdentityUpdate> listInputIdentityUpdate)
+        public virtual async Task<BaseResult<List<TOutput>>> UpdateMultiple(List<TInputIdentityUpdate> listInputIdentityUpdate)
         {
             throw new NotImplementedException();
         }
 
-        public virtual bool DeleteMultiple(List<TInputIdentityDelete> listInputIdentityDelete)
+        public virtual BaseResult<bool> DeleteMultiple(List<TInputIdentityDelete> listInputIdentityDelete)
         {
             throw new NotImplementedException();
         }

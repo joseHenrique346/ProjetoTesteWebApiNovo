@@ -18,7 +18,7 @@ namespace Domain.Service.Base
         public static EnumValidateType InvalidLenght(string? value, int minLenght, int maxLenght)
         {
             if (string.IsNullOrEmpty(value))
-                return minLenght == 0 ? EnumValidateType.Valid : EnumValidateType.Invalid;
+                return minLenght == 0 ? EnumValidateType.Valid : EnumValidateType.NonInformed;
 
             int lenght = value.Length;
             if (lenght < minLenght || lenght > maxLenght)
@@ -31,11 +31,13 @@ namespace Domain.Service.Base
 
         internal static class NotificationMessages
         {
+            public const string SuccesfullyCreatedKey = "SuccessfullyCreated";
             public const string SuccesfullyDeletedKey = "SuccessfullyDeleted";
             public const string SuccesfullyUpdatedKey = "SuccessfullyUpdated";
             public const string InvalidRecordKey = "InvalidRecord";
             public const string InvalidLenghtKey = "InvalidLenght";
             public const string AlreadyExistsKey = "AlreadyExists";
+            //public const string GenericNotProvideKey = "GenericNotProvide";
         }
 
         #endregion
@@ -47,29 +49,44 @@ namespace Domain.Service.Base
             return HandleValidation(index.ToString(), EnumValidateType.Invalid, NotificationMessages.InvalidRecordKey, string.Empty);
         }
 
-        public bool InvalidLenght(string key, EnumValidateType validateType, string propertyName)
+        public bool InvalidLenght(string value, EnumValidateType validateType, string propertyName)
         {
-            return HandleValidation(key, validateType, NotificationMessages.InvalidLenghtKey, propertyName);
+            return HandleValidation(value, validateType, NotificationMessages.InvalidLenghtKey, propertyName);
         }
 
-        public bool AlreadyExists(string key, EnumValidateType validateType)
+        //public bool InvalidLength(string key, string? value, int minLength, int maxLength, EnumValidateType validateType, string propertyName)
+        //{
+        //    return HandleValidation(key, validateType, NotificationMessages.InvalidLenghtKey, value!, propertyName, minLength, maxLength, NotificationMessages.GenericNotProvideKey, propertyName);
+        //}
+
+        public bool AlreadyExists(string value, EnumValidateType validateType)
         {
-            return HandleValidation(key, validateType, NotificationMessages.AlreadyExistsKey, string.Empty);
+            return HandleValidation(value, validateType, NotificationMessages.AlreadyExistsKey, string.Empty);
         }
 
         #endregion
 
         #region Helpers
 
-        private bool AddToDictionary(string key, DetailedNotification validationMessage)
+        private bool AddToDictionary(string value, DetailedNotification validationMessage)
         {
-            NotificationHelper.Add(key, validationMessage);
+            NotificationHelper.Add(value, validationMessage);
             return true;
         }
 
-        public bool AddSuccessMessage(string key, string message)
+        public bool AddSuccessMessage(string value, string message)
         {
-            return AddToDictionary(key, new DetailedNotification(key, [message], EnumNotificationType.Success));
+            return AddToDictionary(value, new DetailedNotification(value, [message], EnumNotificationType.Success));
+        }
+
+        public (List<DetailedNotification> Successes, List<DetailedNotification> Errors) GetValidationResult(string key)
+        {
+            var notificationHelper = NotificationHelper.Get(key);
+
+            var success = notificationHelper.Where(m => m.NotificationType == EnumNotificationType.Success).ToList();
+            var error = notificationHelper.Where(m => m.NotificationType == EnumNotificationType.Error).ToList();
+
+            return (success, error);
         }
 
         private bool HandleValidation(string key, EnumValidateType validType, string invalidMessage, string nonInformedMessage)

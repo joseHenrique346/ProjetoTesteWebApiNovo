@@ -1,23 +1,21 @@
 ﻿using Domain.DTO.Base;
+using Domain.DTO.Entity.Product;
 
-namespace Domain.DTO.Entity
+namespace Domain.DTO.Entity.Brand
 {
     public class BrandDTO : BaseDTO
     {
         #region Properties
-        public string Name { get; set; }
         public string Code { get; set; }
         public string Description { get; set; }
         public List<ProductDTO> ListProduct { get; set; }
         #endregion
 
         #region Constructors
-        public BrandDTO(string name, string code, string description, List<ProductDTO> listProduct)
+        public BrandDTO(string code, string description)
         {
-            Name = name;
             Code = code;
             Description = description;
-            ListProduct = listProduct;
         }
         public BrandDTO() { }
         #endregion

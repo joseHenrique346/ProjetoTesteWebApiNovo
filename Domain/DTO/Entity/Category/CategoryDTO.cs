@@ -1,6 +1,7 @@
 ﻿using Domain.DTO.Base;
+using Domain.DTO.Entity.Product;
 
-namespace Domain.DTO.Entity
+namespace Domain.DTO.Entity.Category
 {
     public class CategoryDTO : BaseDTO
     {

@@ -1,6 +1,7 @@
 ﻿using Domain.DTO.Base;
+using Domain.DTO.Entity.CustomerAddress;
 
-namespace Domain.DTO.Entity
+namespace Domain.DTO.Entity.Customer
 {
     public class CustomerDTO : BaseDTO
     {

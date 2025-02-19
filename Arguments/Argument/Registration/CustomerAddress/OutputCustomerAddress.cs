@@ -2,7 +2,7 @@
 
 namespace Arguments.Argument.Registration.CustomerAddress
 {
-    public class OutputCustomerAddres : BaseOutput<OutputCustomerAddres>
+    public class OutputCustomerAddress : BaseOutput<OutputCustomerAddress>
     {
         #region Properties
 
@@ -16,7 +16,7 @@ namespace Arguments.Argument.Registration.CustomerAddress
 
         #region Constructors
 
-        public OutputCustomerAddres(string number, string street, string neighborhood, string postalCode)
+        public OutputCustomerAddress(string number, string street, string neighborhood, string postalCode)
         {
             Number = number;
             Street = street;
@@ -24,7 +24,7 @@ namespace Arguments.Argument.Registration.CustomerAddress
             PostalCode = postalCode;
         }
 
-        public OutputCustomerAddres() { }
+        public OutputCustomerAddress() { }
 
         #endregion
     }

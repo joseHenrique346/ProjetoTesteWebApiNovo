@@ -8,7 +8,7 @@ namespace Domain.Interface.Base
         where TInputIdentityView : BaseInputIdentityView<TInputIdentityView>
     {
         Task<List<TDTO>> GetAll();
-        Task<List<TDTO>> GetListByListId(List<TInputIdentityView> listId);
+        Task<List<TDTO>> GetListByListId(List<long> listId);
         Task<TDTO?> GetById(TInputIdentityView? id);
         Task<List<TDTO>> Create(List<TDTO> listDTO);
         Task<List<TDTO>> Update(List<TDTO> listDTO);

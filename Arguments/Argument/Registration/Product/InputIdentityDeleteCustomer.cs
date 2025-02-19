@@ -2,7 +2,7 @@
 
 namespace Arguments.Argument.Registration.Product
 {
-    public class InputIdentityDeleteCustomer : BaseInputIdentityDelete<InputIdentityDeleteCustomer>
+    public class InputIdentityDeleteProduct : BaseInputIdentityDelete<InputIdentityDeleteProduct>
     {
         public long Id { get; private set; }
     }
