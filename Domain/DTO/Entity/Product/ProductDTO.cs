@@ -8,7 +8,6 @@ namespace Domain.DTO.Entity.Product
     {
         #region Properties
 
-        public string Name { get; set; }
         public string Code { get; set; }
         public string Description { get; set; }
         public long BrandId { get; set; }
@@ -18,9 +17,8 @@ namespace Domain.DTO.Entity.Product
         #endregion
 
         #region Constructors
-        public ProductDTO(string name, string code, string description, long brandId, long categoryId, decimal price, long stock)
+        public ProductDTO(string code, string description, long brandId, long categoryId, decimal price, long stock)
         {
-            Name = name;
             Code = code;
             Description = description;
             BrandId = brandId;

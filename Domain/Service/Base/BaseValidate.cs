@@ -38,14 +38,12 @@ namespace Domain.Service.Base
             public const string InvalidLenghtKey = "InvalidLenght";
             public const string NonInformedKey = "NonInformedField";
             public const string AlreadyExistsKey = "AlreadyExists";
-            //public const string GenericNotProvideKey = "GenericNotProvide";
         }
 
         internal static class NotificationMessage
         {
             public static string InvalidLenghtMessage(string name, int minLenght, int maxLenght) => $"ERRO: {NotificationMessagesKey.InvalidLenghtKey}, o campo {name} tem que possuir um nome entre {minLenght} e {maxLenght} caracteres.";
             public static string NullLenghtMessage(string name) => $"ERRO: {NotificationMessagesKey.NonInformedKey}, o campo {name} tem que ser preenchido.";
-            //public static string Success(string name) => $"{NotificationMessagesKey.SuccesfullyCreatedKey}";
         }
 
         #endregion

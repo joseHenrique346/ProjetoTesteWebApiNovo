@@ -1,6 +1,8 @@
 ﻿using Domain.Interface.Repository;
 using Domain.Interface.Service.Brand;
+using Domain.Interface.Service.Category;
 using Domain.Service.Registration.Brand;
+using Domain.Service.Registration.Category;
 using Infrastructure.Persistence.EFCore.Repository.Registration;
 
 namespace ProjetoTesteWebApiNovo.Extension
@@ -14,6 +16,8 @@ namespace ProjetoTesteWebApiNovo.Extension
             services.AddScoped<IBrandRepository, BrandRepository>();
 
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            //services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICategoryValidateService, CategoryValidateService>();
 
             services.AddScoped<ICustomerRepository, CustomerRepository>();
 

@@ -24,13 +24,13 @@ namespace Domain.Service.Registration.Brand
             var listOriginalBrandDTO = await _repository.GetAll();
             var selectedListOriginalBrandDTO = listOriginalBrandDTO.Select(i => i.Code);
 
-            var listNewBrand = (from i in listInputCreateBrand
+            var listBrand = (from i in listInputCreateBrand
                                 select new
                                 {
                                     InputCreateBrand = i,
                                     RepeatedCode = selectedListOriginalBrandDTO.FirstOrDefault(j => i.Code == j)
                                 }).ToList();
-            List<BrandValidateDTO> listBrandValidateDTO = listNewBrand.Select(i => new BrandValidateDTO().ValidateCreate(i.InputCreateBrand, i.RepeatedCode)).ToList();
+            List<BrandValidateDTO> listBrandValidateDTO = listBrand.Select(i => new BrandValidateDTO().ValidateCreate(i.InputCreateBrand, i.RepeatedCode)).ToList();
             _validate.Create(listBrandValidateDTO);
 
             var (success, error) = GetValidationResult();
@@ -39,11 +39,12 @@ namespace Domain.Service.Registration.Brand
                 return BaseResult<List<OutputBrand>>.Failure(error);
 
             var validlistBrand = (from i in RemoveInvalid(listBrandValidateDTO) where !i.Invalid select i).ToList();
-            var newListBrand = (from i in validlistBrand select new BrandDTO(i.InputCreateBrand.Code, i.InputCreateBrand.Description)).ToList();
+            var newListBrand = (from i in validlistBrand 
+                                select new BrandDTO(i.InputCreateBrand.Code, i.InputCreateBrand.Description)).ToList();
 
-            await _repository.Create(newListBrand);
+            var listNewBrand = await _repository.Create(newListBrand);
 
-            return BaseResult<List<OutputBrand>>.Success(Conversor.GenericConvertList<OutputBrand, BrandDTO>(newListBrand), success);
+            return BaseResult<List<OutputBrand>>.Success(Conversor.GenericConvertList<OutputBrand, BrandDTO>(listNewBrand), success);
         }
 
         public override async Task<BaseResult<List<OutputBrand>>> UpdateMultiple(List<InputIdentityUpdateBrand> listInputIdentityUpdateBrand)

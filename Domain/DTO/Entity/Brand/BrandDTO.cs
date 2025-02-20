@@ -8,7 +8,7 @@ namespace Domain.DTO.Entity.Brand
         #region Properties
         public string Code { get; set; }
         public string Description { get; set; }
-        public List<ProductDTO> ListProduct { get; set; }
+        public List<ProductDTO>? ListProduct { get; set; }
         #endregion
 
         #region Constructors
@@ -16,6 +16,13 @@ namespace Domain.DTO.Entity.Brand
         {
             Code = code;
             Description = description;
+        }
+
+        public BrandDTO(string code, string description, List<ProductDTO> listProduct)
+        {
+            Code = code;
+            Description = description;
+            ListProduct = listProduct;
         }
         public BrandDTO() { }
         #endregion

@@ -10,10 +10,10 @@ namespace Arguments.Conversor
         {
             TOutput output = new TOutput();
 
-            (from i in input.GetType().GetProperties()
-             let properties = output.GetType().GetProperty(i.Name)
-             where properties != null
-             select properties.setValue(output, i.GetValue(input))).ToList();
+            var conver = (from i in input.GetType().GetProperties()
+                          let properties = output.GetType().GetProperty(i.Name)
+                          where properties != null
+                          select properties.setValue(output, i.GetValue(input))).ToList();
 
             return output;
         }

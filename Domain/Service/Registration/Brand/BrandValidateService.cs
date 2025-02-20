@@ -30,7 +30,7 @@ namespace Domain.Service.Registration.Brand
              select InvalidLenght(i.InputCreateBrand.Code, resultInvalidLenght, nameof(i.InputCreateBrand.Description), 1, 100)).ToList();
 
             (from i in RemoveIgnore(listBrandValidateDTO)
-             where i.OriginalBrand != null
+             where i.RepeatedCode != null
              let setInvalid = i.SetInvalid()
              select AlreadyExists(i.InputCreateBrand!.Code, EnumValidateType.Invalid)).ToList();
 
