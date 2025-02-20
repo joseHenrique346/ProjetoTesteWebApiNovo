@@ -8,8 +8,10 @@ namespace Infrastructure.Persistence.EFCore.Mapping
     {
         public void Configure(EntityTypeBuilder<Customer> builder)
         {
+            builder.ToTable("cliente");
+
             builder.HasKey(i => i.Id).HasName("id");
-            builder.HasMany(i => i.ListCustomerAddress).WithOne(j => j.Customer).HasForeignKey(k => k.CustomerId);
+            //builder.HasMany(i => i.ListCustomerAddress).WithOne(j => j.Customer).HasForeignKey(k => k.CustomerId);
 
             builder.Property(i => i.FirstName).HasColumnName("primeiro_nome");
             builder.Property(i => i.FirstName).IsRequired();

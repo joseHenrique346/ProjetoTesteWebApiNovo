@@ -1,7 +1,5 @@
 ﻿using Arguments.Argument.Base.ApiResponse;
 using Arguments.Argument.Base.Crud;
-using Arguments.Argument.Registration.Brand;
-using Arguments.Conversor;
 using Domain.DTO.Base;
 using Domain.Interface.Base;
 namespace Domain.Service.Base
@@ -49,7 +47,7 @@ namespace Domain.Service.Base
             throw new NotImplementedException();
         }
 
-        public virtual BaseResult<bool> DeleteMultiple(List<TInputIdentityDelete> listInputIdentityDelete)
+        public virtual async Task<BaseResult<bool>> DeleteMultiple(List<TInputIdentityDelete> listInputIdentityDelete)
         {
             throw new NotImplementedException();
         }

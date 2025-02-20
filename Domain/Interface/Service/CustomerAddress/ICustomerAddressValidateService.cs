@@ -1,4 +1,4 @@
-﻿namespace Domain.Interface.Service
+﻿namespace Domain.Interface.Service.CustomerAddress
 {
     public interface ICustomerAddressValidateService
     {

@@ -8,7 +8,8 @@ namespace Infrastructure.Persistence.EFCore.Context
         public DbSet<Brand> Brand { get; set; }
         public DbSet<Product> Product { get; set; }
         public DbSet<Category> Category { get; set; }
-        public DbSet<CustomerAddress> Customer { get; set; }
+        public DbSet<CustomerAddress> CustomerAddress { get; set; }
+        public DbSet<Customer> Customer { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

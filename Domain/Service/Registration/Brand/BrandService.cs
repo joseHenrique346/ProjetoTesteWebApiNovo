@@ -1,56 +1,54 @@
 ﻿using Arguments.Argument.Base.ApiResponse;
-using Arguments.Argument.Enum;
 using Arguments.Argument.Registration.Brand;
 using Arguments.Conversor;
 using Domain.DTO.Entity.Brand;
 using Domain.Interface.Repository;
-using Domain.Interface.Service;
+using Domain.Interface.Service.Brand;
 using Domain.Service.Base;
-using Domain.Utils.Helper;
-using System.Security.Cryptography;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Domain.Service.Registration.Brand
 {
-    public class BrandService : BaseService<BrandDTO, IBrandRepository, InputIdentityViewBrand, InputCreateBrand, InputUpdateBrand, InputIdentityUpdateBrand, InputIdentityDeleteBrand, BrandValidateDTO, OutputBrand>
+    public class BrandService : BaseService<BrandDTO, IBrandRepository, InputIdentityViewBrand, InputCreateBrand, InputUpdateBrand, InputIdentityUpdateBrand, InputIdentityDeleteBrand, BrandValidateDTO, OutputBrand>, IBrandService
     {
         private readonly IBrandValidateService _validate;
+        private readonly IBrandRepository _repository;
         public BrandService(IBrandRepository repository, IBrandValidateService validate) : base(repository)
         {
-            validate = _validate;
+            _repository = repository;
+            _validate = validate;
         }
 
         public override async Task<BaseResult<List<OutputBrand>>> CreateMultiple(List<InputCreateBrand> listInputCreateBrand)
         {
-            var listOriginalBrandDTO = await GetAll();
+            var listOriginalBrandDTO = await _repository.GetAll();
+            var selectedListOriginalBrandDTO = listOriginalBrandDTO.Select(i => i.Code);
 
             var listNewBrand = (from i in listInputCreateBrand
                                 select new
                                 {
                                     InputCreateBrand = i,
-                                    RepeatedCode = listOriginalBrandDTO.FirstOrDefault(j => i.Code == j.Code).Code
+                                    RepeatedCode = selectedListOriginalBrandDTO.FirstOrDefault(j => i.Code == j)
                                 }).ToList();
             List<BrandValidateDTO> listBrandValidateDTO = listNewBrand.Select(i => new BrandValidateDTO().ValidateCreate(i.InputCreateBrand, i.RepeatedCode)).ToList();
             _validate.Create(listBrandValidateDTO);
 
-            List<DetailedNotification> success = [];
-            List<DetailedNotification> error = [];
+            var (success, error) = GetValidationResult();
 
-            foreach (var i in listBrandValidateDTO)
-            {
-                (success, error) = GetValidationResult(i.InputCreateBrand.Code);
-            }
-
-            if (error.Count == listInputCreateBrand.Count)
+            if (success.Count == 0 && error.Count > 0)
                 return BaseResult<List<OutputBrand>>.Failure(error);
 
             var validlistBrand = (from i in RemoveInvalid(listBrandValidateDTO) where !i.Invalid select i).ToList();
             var newListBrand = (from i in validlistBrand select new BrandDTO(i.InputCreateBrand.Code, i.InputCreateBrand.Description)).ToList();
+
+            await _repository.Create(newListBrand);
+
             return BaseResult<List<OutputBrand>>.Success(Conversor.GenericConvertList<OutputBrand, BrandDTO>(newListBrand), success);
         }
 
         public override async Task<BaseResult<List<OutputBrand>>> UpdateMultiple(List<InputIdentityUpdateBrand> listInputIdentityUpdateBrand)
         {
-            var listOriginalBrandDTO = await GetListByListId(listInputIdentityUpdateBrand.Select(i => i.Id).ToList());
+            var listOriginalBrandDTO = await _repository.GetListByListId(listInputIdentityUpdateBrand.Select(i => i.Id).ToList());
 
             var listBrandToUpdate = (from i in listInputIdentityUpdateBrand
                                      select new
@@ -61,16 +59,11 @@ namespace Domain.Service.Registration.Brand
 
             List<BrandValidateDTO> listBrandValidateDTO = listBrandToUpdate.Select(i => new BrandValidateDTO().ValidateUpdate(i.InputIdentityUpdateBrand, i.OriginalBrand)).ToList();
 
-            List<DetailedNotification> success = [];
-            List<DetailedNotification> error = [];
-
             _validate.Update(listBrandValidateDTO);
-            foreach (var i in listBrandValidateDTO)
-            {
-                (success, error) = GetValidationResult(i.InputUpdateBrand.Code);
-            }
 
-            if (error.Count == listInputIdentityUpdateBrand.Count)
+            var (success, error) = GetValidationResult();
+
+            if (success.Count == 0 && error.Count > 0)
                 return BaseResult<List<OutputBrand>>.Failure(error);
 
             var validlistBrand = (from i in RemoveInvalid(listBrandValidateDTO) where !i.Invalid select i).ToList();
@@ -83,13 +76,38 @@ namespace Domain.Service.Registration.Brand
                                         let code = j.Code = inputUpdate.Code
                                         select j).ToList();
 
+            await _repository.Update(originalBrandUpdated);
+
             var outputOriginalBrandUpdated = Conversor.GenericConvertList<OutputBrand, BrandDTO>(originalBrandUpdated);
             return BaseResult<List<OutputBrand>>.Success(outputOriginalBrandUpdated, success);
         }
 
-        public override BaseResult<bool> DeleteMultiple(List<InputIdentityDeleteBrand> listInputIdentityDeleteBrand)
+        public override async Task<BaseResult<bool>> DeleteMultiple(List<InputIdentityDeleteBrand> listInputIdentityDeleteBrand)
         {
-            throw new NotImplementedException();
+            var listOriginalBrandDTO = await _repository.GetAll();
+            var selectedListOriginalBrandDTO = listOriginalBrandDTO.Select(i => i.Id).ToList();
+
+            var listBrandToDelete = (from i in listInputIdentityDeleteBrand
+                                     select new
+                                     {
+                                         InputIdentityDeleteBrand = i,
+                                         OriginalBrand = selectedListOriginalBrandDTO.FirstOrDefault(j => j == i.Id)
+                                     }).ToList();
+
+            var listBrandValidateDTO = listBrandToDelete.Select(i => new BrandValidateDTO().ValidateDelete(i.InputIdentityDeleteBrand, i.OriginalBrand)).ToList();
+            _validate.Delete(listBrandValidateDTO);
+
+            var (success, error) = GetValidationResult();
+
+            if (success.Count == 0 && error.Count > 0)
+                return BaseResult<bool>.Failure(error);
+
+            var validlistDeleteBrand = (from i in RemoveInvalid(listBrandValidateDTO) where !i.Invalid select i).ToList();
+            var listBrandDTO = Conversor.GenericConvertList<BrandDTO, BrandValidateDTO>(validlistDeleteBrand);
+
+            await _repository.Delete(listBrandDTO);
+
+            return BaseResult<bool>.Success(true, success);
         }
     }
 }

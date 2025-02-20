@@ -6,9 +6,9 @@ namespace Infrastructure.Persistence.EFCore.Entity.Registration
     {
         #region Properties
 
+        public string Code { get; private set; }
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
-        public string Code { get; private set; }
         public string Phone { get; private set; }
         public DateOnly? BirthDate { get; private set; }
         public string Document { get; private set; }

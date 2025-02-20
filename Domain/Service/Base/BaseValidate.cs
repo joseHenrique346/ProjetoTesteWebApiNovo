@@ -29,15 +29,23 @@ namespace Domain.Service.Base
 
         #region Messages
 
-        internal static class NotificationMessages
+        internal static class NotificationMessagesKey
         {
             public const string SuccesfullyCreatedKey = "SuccessfullyCreated";
             public const string SuccesfullyDeletedKey = "SuccessfullyDeleted";
             public const string SuccesfullyUpdatedKey = "SuccessfullyUpdated";
             public const string InvalidRecordKey = "InvalidRecord";
             public const string InvalidLenghtKey = "InvalidLenght";
+            public const string NonInformedKey = "NonInformedField";
             public const string AlreadyExistsKey = "AlreadyExists";
             //public const string GenericNotProvideKey = "GenericNotProvide";
+        }
+
+        internal static class NotificationMessage
+        {
+            public static string InvalidLenghtMessage(string name, int minLenght, int maxLenght) => $"ERRO: {NotificationMessagesKey.InvalidLenghtKey}, o campo {name} tem que possuir um nome entre {minLenght} e {maxLenght} caracteres.";
+            public static string NullLenghtMessage(string name) => $"ERRO: {NotificationMessagesKey.NonInformedKey}, o campo {name} tem que ser preenchido.";
+            //public static string Success(string name) => $"{NotificationMessagesKey.SuccesfullyCreatedKey}";
         }
 
         #endregion
@@ -46,12 +54,12 @@ namespace Domain.Service.Base
 
         public bool Invalid(int index)
         {
-            return HandleValidation(index.ToString(), EnumValidateType.Invalid, NotificationMessages.InvalidRecordKey, string.Empty);
+            return HandleValidation(index.ToString(), EnumValidateType.Invalid, NotificationMessagesKey.InvalidRecordKey, string.Empty);
         }
 
-        public bool InvalidLenght(string value, EnumValidateType validateType, string propertyName)
+        public bool InvalidLenght(string value, EnumValidateType validateType, string propertyName, int minLenght, int maxLenght)
         {
-            return HandleValidation(value, validateType, NotificationMessages.InvalidLenghtKey, propertyName);
+            return HandleValidation(value, validateType, NotificationMessage.InvalidLenghtMessage(propertyName, minLenght, maxLenght), NotificationMessage.NullLenghtMessage(propertyName));
         }
 
         //public bool InvalidLength(string key, string? value, int minLength, int maxLength, EnumValidateType validateType, string propertyName)
@@ -61,7 +69,7 @@ namespace Domain.Service.Base
 
         public bool AlreadyExists(string value, EnumValidateType validateType)
         {
-            return HandleValidation(value, validateType, NotificationMessages.AlreadyExistsKey, string.Empty);
+            return HandleValidation(value, validateType, NotificationMessagesKey.AlreadyExistsKey, string.Empty);
         }
 
         #endregion
@@ -79,9 +87,9 @@ namespace Domain.Service.Base
             return AddToDictionary(value, new DetailedNotification(value, [message], EnumNotificationType.Success));
         }
 
-        public (List<DetailedNotification> Successes, List<DetailedNotification> Errors) GetValidationResult(string key)
+        public (List<DetailedNotification> Successes, List<DetailedNotification> Errors) GetValidationResult()
         {
-            var notificationHelper = NotificationHelper.Get(key);
+            var notificationHelper = NotificationHelper.Get();
 
             var success = notificationHelper.Where(m => m.NotificationType == EnumNotificationType.Success).ToList();
             var error = notificationHelper.Where(m => m.NotificationType == EnumNotificationType.Error).ToList();

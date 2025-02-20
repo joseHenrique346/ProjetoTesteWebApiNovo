@@ -14,9 +14,10 @@ namespace Infrastructure.Persistence.EFCore.Repository.Registration
         private readonly AppDbContext _context;
         private readonly DbSet<Brand> _dbSet;
 
-        public BrandRepository(AppDbContext context, DbSet<Brand> dbSet) : base(context)
+        public BrandRepository(AppDbContext context) : base(context)
         {
-            _dbSet = dbSet;
+            _context = context;
+            _dbSet = _context.Set<Brand>();
         }
 
         public async Task<List<BrandDTO>> GetListByListCode(List<string> code)

@@ -1,8 +1,8 @@
 ﻿using Domain.DTO.Entity.Brand;
 
-namespace Domain.Interface.Service
+namespace Domain.Interface.Service.Brand
 {
-    public interface IBrandValidateService 
+    public interface IBrandValidateService
     {
         void Create(List<BrandValidateDTO> listBrandValidateDTO);
         void Update(List<BrandValidateDTO> listBrandValidateDTO);

@@ -10,19 +10,19 @@ namespace Domain.Service.Registration.Category
     {
         public CategoryService(ICategoryRepository repository) : base(repository) { }
 
-        public override List<OutputCategory> CreateMultiple(List<InputCreateCategory> listInputCreateCategory)
-        {
-            throw new NotImplementedException();
-        }
+        //public override List<OutputCategory> CreateMultiple(List<InputCreateCategory> listInputCreateCategory)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public override async Task<BaseResult<List<OutputCategory>>> UpdateMultiple(List<InputIdentityUpdateCategory> listInputIdentityUpdateCategory)
         {
             throw new NotImplementedException();
         }
 
-        public override bool DeleteMultiple(List<InputIdentityDeleteCategory> listInputIdentityDeleteCategory)
-        {
-            throw new NotImplementedException();
-        }
+        //public override bool DeleteMultiple(List<InputIdentityDeleteCategory> listInputIdentityDeleteCategory)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }
