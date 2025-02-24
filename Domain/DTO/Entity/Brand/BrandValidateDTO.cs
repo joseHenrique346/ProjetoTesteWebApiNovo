@@ -1,4 +1,5 @@
 ﻿using Arguments.Argument.Registration.Brand;
+using Arguments.Argument.Registration.Customer;
 using Domain.DTO.Base;
 
 namespace Domain.DTO.Entity.Brand
@@ -6,27 +7,32 @@ namespace Domain.DTO.Entity.Brand
     public class BrandValidateDTO : BaseValidateDTO
     {
         public InputCreateBrand InputCreateBrand { get; private set; }
-        public string? RepeatedCode { get; private set; }
+        public string? ExistingCode { get; private set; }
+        public InputCreateBrand? RepeatedCode { get; private set; }
+
         public InputUpdateBrand InputUpdateBrand { get; private set; }
         public BrandDTO OriginalBrand { get; set; }
 
         public InputIdentityUpdateBrand InputIdentityUpdateBrand { get; private set; }
+        public InputIdentityUpdateBrand? RepeatedCodeUpdate { get; private set; }
 
         public InputIdentityDeleteBrand InputIdentityDeleteBrand { get; private set; }
         public long? OriginalBrandId { get; set; }
         public BrandValidateDTO() { }
 
-        public BrandValidateDTO ValidateCreate(InputCreateBrand inputCreateBrand, string? repeatedCode)
+        public BrandValidateDTO ValidateCreate(InputCreateBrand inputCreateBrand, string? existingCode, InputCreateBrand repeatedCode)
         {
             InputCreateBrand = inputCreateBrand;
+            ExistingCode = existingCode;
             RepeatedCode = repeatedCode;
             return this;
         }
 
-        public BrandValidateDTO ValidateUpdate(InputIdentityUpdateBrand inputIdentityUpdateBrand, BrandDTO originalBrand)
+        public BrandValidateDTO ValidateUpdate(InputIdentityUpdateBrand inputIdentityUpdateBrand, BrandDTO originalBrand, InputIdentityUpdateBrand repeatedCodeUpdate)
         {
             InputIdentityUpdateBrand = inputIdentityUpdateBrand;
             OriginalBrand = originalBrand;
+            RepeatedCodeUpdate = repeatedCodeUpdate;
             return this;
         }
 

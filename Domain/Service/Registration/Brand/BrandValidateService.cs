@@ -12,10 +12,7 @@ namespace Domain.Service.Registration.Brand
         {
             NotificationHelper.CreateNewDictionary();
 
-            (from i in RemoveIgnore(listBrandValidateDTO)
-             where listBrandValidateDTO == null
-             let setIgnore = i.SetIgnore()
-             select Invalid(listBrandValidateDTO.IndexOf(i))).ToList();
+            ValidateNullDTO(listBrandValidateDTO);
 
             (from i in RemoveIgnore(listBrandValidateDTO)
              let resultInvalidLenght = InvalidLenght(i.InputCreateBrand!.Code, 1, 6)
@@ -30,9 +27,14 @@ namespace Domain.Service.Registration.Brand
              select InvalidLenght(i.InputCreateBrand.Code, resultInvalidLenght, nameof(i.InputCreateBrand.Description), 1, 100)).ToList();
 
             (from i in RemoveIgnore(listBrandValidateDTO)
-             where i.RepeatedCode != null
+             where i.ExistingCode != null
              let setInvalid = i.SetInvalid()
              select AlreadyExists(i.InputCreateBrand!.Code, EnumValidateType.Invalid)).ToList();
+
+            (from i in RemoveIgnore(listBrandValidateDTO)
+             where i.RepeatedCode != null
+             let setInvalid = i.SetInvalid()
+             select RepeatedCode(i.InputCreateBrand!.Code, EnumValidateType.Invalid)).ToList();
 
             (from i in RemoveInvalid(listBrandValidateDTO)
              select AddSuccessMessage(i.InputCreateBrand!.Code, NotificationMessagesKey.SuccesfullyCreatedKey)).ToList();
@@ -42,10 +44,7 @@ namespace Domain.Service.Registration.Brand
         {
             NotificationHelper.CreateNewDictionary();
 
-            (from i in RemoveIgnore(listBrandValidateDTO)
-             where listBrandValidateDTO == null
-             let setIgnore = i.SetIgnore()
-             select Invalid(listBrandValidateDTO.IndexOf(i))).ToList();
+            ValidateNullDTO(listBrandValidateDTO);
 
             (from i in RemoveIgnore(listBrandValidateDTO)
              let resultInvalidLenght = InvalidLenght(i.InputCreateBrand!.Code, 1, 6)
@@ -60,6 +59,16 @@ namespace Domain.Service.Registration.Brand
              select InvalidLenght(i.InputCreateBrand.Description, resultInvalidLenght, nameof(i.InputCreateBrand.Description), 1, 100)).ToList();
 
             (from i in RemoveIgnore(listBrandValidateDTO)
+             where i.ExistingCode != null
+             let setInvalid = i.SetInvalid()
+             select AlreadyExists(i.InputCreateBrand!.Code, EnumValidateType.Invalid)).ToList();
+
+            (from i in RemoveIgnore(listBrandValidateDTO)
+             where i.RepeatedCode != null
+             let setInvalid = i.SetInvalid()
+             select RepeatedCode(i.InputCreateBrand!.Code, EnumValidateType.Invalid)).ToList();
+
+            (from i in RemoveIgnore(listBrandValidateDTO)
              where i.OriginalBrand == null
              let setIgnore = i.SetIgnore()
              select Invalid(listBrandValidateDTO.IndexOf(i))).ToList();
@@ -70,10 +79,7 @@ namespace Domain.Service.Registration.Brand
 
         public void Delete(List<BrandValidateDTO> listBrandValidateDTO)
         {
-            (from i in RemoveIgnore(listBrandValidateDTO)
-             where listBrandValidateDTO == null
-             let setIgnore = i.SetIgnore()
-             select Invalid(listBrandValidateDTO.IndexOf(i))).ToList();
+            ValidateNullDTO(listBrandValidateDTO);
 
             (from i in RemoveIgnore(listBrandValidateDTO)
              where i.OriginalBrand == default

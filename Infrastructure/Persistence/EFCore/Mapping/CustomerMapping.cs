@@ -17,9 +17,9 @@ namespace Infrastructure.Persistence.EFCore.Mapping
             builder.Property(i => i.FirstName).IsRequired();
             builder.Property(i => i.FirstName).HasMaxLength(100);
 
-            builder.Property(i => i.FirstName).HasColumnName("sobrenome");
-            builder.Property(i => i.FirstName).IsRequired();
-            builder.Property(i => i.FirstName).HasMaxLength(100);
+            builder.Property(i => i.LastName).HasColumnName("sobrenome");
+            builder.Property(i => i.LastName).IsRequired();
+            builder.Property(i => i.LastName).HasMaxLength(100);
 
             builder.Property(i => i.Code).HasColumnName("código");
             builder.Property(i => i.Code).IsRequired();
