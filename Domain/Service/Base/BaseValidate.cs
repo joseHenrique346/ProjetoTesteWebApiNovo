@@ -40,6 +40,14 @@ namespace Domain.Service.Base
             return EnumValidateType.Valid;
         }
 
+        public static EnumValidateType InvalidRelatedProperty(object? relatedProperty, object? value)
+        {
+            if (value == null)
+                return EnumValidateType.Valid;
+
+            return value.Equals(0) ? EnumValidateType.NonInformed : !value.Equals(0) && relatedProperty == null ? EnumValidateType.Invalid : EnumValidateType.Valid;
+        }
+
         #region Messages
 
         internal static class NotificationMessagesKey
@@ -98,6 +106,8 @@ namespace Domain.Service.Base
         {
             return HandleValidation(value, validateType, NotificationMessage.InvalidBirthDateMessage(customerName, birthDate), string.Empty);
         }
+
+
 
         #endregion
 

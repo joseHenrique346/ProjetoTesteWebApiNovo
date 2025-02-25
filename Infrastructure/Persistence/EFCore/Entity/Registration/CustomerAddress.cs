@@ -8,6 +8,7 @@ namespace Infrastructure.Persistence.EFCore.Entity.Registration
 
         public long CustomerId { get; private set; }
         public string Number { get; private set; } = string.Empty;
+        public string Street { get; private set; } = string.Empty;
         public string? Complement { get; private set; }
         public string? Reference { get; private set; }
         public string Neighborhood { get; private set; } = string.Empty;
@@ -17,7 +18,7 @@ namespace Infrastructure.Persistence.EFCore.Entity.Registration
 
         #region Constructors
 
-        public CustomerAddress(long customerId, string number, string? complement, string? reference, string neighborhood, string postalCode)
+        public CustomerAddress(long customerId, string number, string? complement, string? reference, string neighborhood, string postalCode, string street)
         {
             CustomerId = customerId;
             Number = number;
@@ -25,6 +26,7 @@ namespace Infrastructure.Persistence.EFCore.Entity.Registration
             Reference = reference;
             Neighborhood = neighborhood;
             PostalCode = postalCode;
+            Street = street;
         }
 
         public CustomerAddress() { }

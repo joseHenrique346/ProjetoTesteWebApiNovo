@@ -2,7 +2,7 @@
 
 namespace Arguments.Argument.Registration.CustomerAddress
 {
-    public class InputIdentityDeleteCustomer : BaseInputIdentityDelete<InputIdentityDeleteCustomer>
+    public class InputIdentityDeleteCustomerAddress : BaseInputIdentityDelete<InputIdentityDeleteCustomerAddress>
     {
         public long Id { get; private set; }
     }

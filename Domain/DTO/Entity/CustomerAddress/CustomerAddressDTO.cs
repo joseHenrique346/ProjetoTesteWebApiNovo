@@ -9,6 +9,7 @@ namespace Domain.DTO.Entity.CustomerAddress
 
         public long CustomerId { get; private set; }
         public string Number { get; private set; } = string.Empty;
+        public string Street { get; private set; } = string.Empty;
         public string? Complement { get; private set; }
         public string? Reference { get; private set; }
         public string Neighborhood { get; private set; } = string.Empty;
@@ -18,7 +19,7 @@ namespace Domain.DTO.Entity.CustomerAddress
 
         #region Constructors
 
-        public CustomerAddressDTO(long customerId, string number, string? complement, string? reference, string neighborhood, string postalCode)
+        public CustomerAddressDTO(long customerId, string number, string? complement, string? reference, string neighborhood, string postalCode, string street)
         {
             CustomerId = customerId;
             Number = number;
@@ -26,6 +27,7 @@ namespace Domain.DTO.Entity.CustomerAddress
             Reference = reference;
             Neighborhood = neighborhood;
             PostalCode = postalCode;
+            Street = street;
         }
 
         public CustomerAddressDTO() { }

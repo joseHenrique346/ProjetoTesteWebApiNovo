@@ -34,6 +34,7 @@ namespace Domain.Service.Registration.Brand
                                                    ExistingCode = selectedListOriginalBrandDTO.FirstOrDefault(j => i.Code == j),
                                                    RepeatedCode = repeatedCode.FirstOrDefault()
                                                }).ToList();
+
             List<BrandValidateDTO> listBrandValidateDTO = newListInputBrandToValidate.Select(i => new BrandValidateDTO().ValidateCreate(i.InputCreateBrand, i.ExistingCode, i.RepeatedCode)).ToList();
             _validate.Create(listBrandValidateDTO);
 
@@ -90,8 +91,7 @@ namespace Domain.Service.Registration.Brand
 
             await _repository.Update(originalBrandToUpdate);
 
-            var outputOriginalBrandUpdated = Conversor.GenericConvertList<OutputBrand, BrandDTO>(originalBrandToUpdate);
-            return BaseResult<List<OutputBrand>>.Success(outputOriginalBrandUpdated, [.. success, .. error]);
+            return BaseResult<List<OutputBrand>>.Success(Conversor.GenericConvertList<OutputBrand, BrandDTO>(originalBrandToUpdate), [.. success, .. error]);
         }
 
         public override async Task<BaseResult<bool>> DeleteMultiple(List<InputIdentityDeleteBrand> listInputIdentityDeleteBrand)
