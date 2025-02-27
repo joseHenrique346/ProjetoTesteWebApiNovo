@@ -129,11 +129,5 @@ namespace Domain.Service.Registration.CustomerService
 
             return BaseResult<bool>.Success(true, [.. success, .. error]);
         }
-
-        public static CustomerDTO setValue(PropertyInfo property, CustomerDTO customer, object? value)
-        {
-            property.SetValue(customer, value);
-            return customer;
-        }
     }
 }

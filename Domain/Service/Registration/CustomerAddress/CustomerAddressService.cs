@@ -6,6 +6,7 @@ using Domain.DTO.Entity.CustomerAddress;
 using Domain.Interface.Repository;
 using Domain.Interface.Service.CustomerAddress;
 using Domain.Service.Base;
+using System.Runtime.CompilerServices;
 
 namespace Domain.Service.Registration.CustomerAddress
 {
@@ -58,11 +59,11 @@ namespace Domain.Service.Registration.CustomerAddress
             var newListCustomerAddressToValidate = (from i in listInputIdentityUpdateCustomerAddress
                                                     select new
                                                     {
-                                                        InputUpdateCustomerAddress = i.InputUpdateCustomerAddress,
+                                                        InputUpdate = i.InputUpdateCustomerAddress,
                                                         OriginalCustomerAddress = listOriginalCustomerAddress.FirstOrDefault(j => j.Id == i.Id)
                                                     }).ToList();
 
-            var newListCustomerAddressValidateDTO = newListCustomerAddressToValidate.Select(i => new CustomerAddressValidateDTO().ValidateUpdate(i.InputUpdateCustomerAddress, i.OriginalCustomerAddress)).ToList();
+            var newListCustomerAddressValidateDTO = newListCustomerAddressToValidate.Select(i => new CustomerAddressValidateDTO().ValidateUpdate(i.InputUpdate, i.OriginalCustomerAddress)).ToList();
             _validate.Update(newListCustomerAddressValidateDTO);
 
             var (success, error) = GetValidationResult();
@@ -70,11 +71,41 @@ namespace Domain.Service.Registration.CustomerAddress
             if (success.Count == 0 && error.Count > 0)
                 return BaseResult<List<OutputCustomerAddress>>.Failure(error);
 
+            var validListCustomerAddress = (from i in RemoveInvalid(newListCustomerAddressValidateDTO) where !i.Invalid select i).ToList();
+
+            var newListCustomerAddressToUpdate = (from i in validListCustomerAddress.GetType().GetProperties()
+                                                  from j in listOriginalCustomerAddress
+                                                  let properties = j.GetType().GetProperty(i.Name)
+                                                  where properties != null
+                                                  select setValue(properties, j, i.GetValue(i.Name))).ToList();
+
+            await _repository.Update(newListCustomerAddressToUpdate);
+            return BaseResult<List<OutputCustomerAddress>>.Success(Conversor.GenericConvertList<OutputCustomerAddress, CustomerAddressDTO>(newListCustomerAddressToUpdate), [.. success, .. error]);
         }
 
-        public override Task<BaseResult<bool>> DeleteMultiple(List<InputIdentityDeleteCustomerAddress> listInputIdentityDeleteCustomerAddress)
+        public override async Task<BaseResult<bool>> DeleteMultiple(List<InputIdentityDeleteCustomerAddress> listInputIdentityDeleteCustomerAddress)
         {
-            throw new NotImplementedException();
+            var listOriginalCustomerAddress = await _repository.GetListByListId(listInputIdentityDeleteCustomerAddress.Select(i => i.Id).ToList());
+
+            var newListCustomerAddressToValidate = (from i in listInputIdentityDeleteCustomerAddress
+                                                    select new
+                                                    {
+                                                        InputDelete = i,
+                                                        OriginalCustomerAddress = listOriginalCustomerAddress.FirstOrDefault(j => j.Id == i.Id)
+                                                    }).ToList();
+
+            var newListCustomerAddressValidateDTO = newListCustomerAddressToValidate.Select(i => new CustomerAddressValidateDTO().ValidateDelete(i.InputDelete, i.OriginalCustomerAddress)).ToList();
+            _validate.Delete(newListCustomerAddressValidateDTO);
+
+            var (success, error) = GetValidationResult();
+
+            if (success.Count == 0 && error.Count > 0)
+                return BaseResult<bool>.Failure(error);
+
+            var validListCustomerAddress = (from i in RemoveInvalid(newListCustomerAddressValidateDTO) where !i.Invalid select i).ToList();
+            await _repository.Delete(Conversor.GenericConvertList<CustomerAddressDTO, CustomerAddressValidateDTO>(validListCustomerAddress));
+
+            return BaseResult<bool>.Success(true, [.. success, .. error]);
         }
     }
 }

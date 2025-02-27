@@ -11,6 +11,7 @@ namespace Domain.DTO.Entity.CustomerAddress
         public InputUpdateCustomerAddress InputUpdateCustomerAddress { get; set; }
         public CustomerAddressDTO? OriginalCustomerAddress { get; set; }
         public InputIdentityUpdateCustomerAddress InputIdentityUpdateCustomerAddress { get; set; }
+        public InputIdentityDeleteCustomerAddress InputIdentityDeleteCustomerAddress { get; set; }
 
         public CustomerAddressValidateDTO ValidateCreate(InputCreateCustomerAddress inputCreateCustomerAddress, CustomerDTO? relatedCustomerDTO)
         {
@@ -26,9 +27,11 @@ namespace Domain.DTO.Entity.CustomerAddress
             return this;
         }
 
-        public CustomerAddressValidateDTO ValidateDelete()
+        public CustomerAddressValidateDTO ValidateDelete(InputIdentityDeleteCustomerAddress inputIdentityDeleteCustomerAddress, CustomerAddressDTO? originalCustomerAddress)
         {
-            throw new NotImplementedException();
+            InputIdentityDeleteCustomerAddress = inputIdentityDeleteCustomerAddress;
+            OriginalCustomerAddress = originalCustomerAddress;
+            return this;
         }
     }
 }

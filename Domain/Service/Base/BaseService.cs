@@ -2,6 +2,7 @@
 using Arguments.Argument.Base.Crud;
 using Domain.DTO.Base;
 using Domain.Interface.Base;
+using System.Reflection;
 namespace Domain.Service.Base
 {
     public class BaseService<TDTO, TRepository, TInputIdentityView, TInputCreate, TInputUpdate, TInputIdentityUpdate, TInputIdentityDelete, TValidateDTO, TOutput> : BaseValidate<TValidateDTO>
@@ -50,6 +51,12 @@ namespace Domain.Service.Base
         public virtual async Task<BaseResult<bool>> DeleteMultiple(List<TInputIdentityDelete> listInputIdentityDelete)
         {
             throw new NotImplementedException();
+        }
+
+        public static TOutput setValue<TOutput>(PropertyInfo property, TOutput output, object? value)
+        {
+            property.SetValue(output, value);
+            return output;
         }
     }
 }

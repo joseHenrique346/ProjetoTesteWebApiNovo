@@ -6,5 +6,6 @@ namespace Domain.Interface.Service.CustomerAddress
     {
         public void Create(List<CustomerAddressValidateDTO> listCustomerAddressValidateDTO);
         public void Update(List<CustomerAddressValidateDTO> listCustomerAddressValidateDTO);
+        public void Delete(List<CustomerAddressValidateDTO> listCustomerAddressValidateDTO);
     }
 }

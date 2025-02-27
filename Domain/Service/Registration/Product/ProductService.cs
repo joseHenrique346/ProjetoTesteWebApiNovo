@@ -11,19 +11,19 @@ namespace Domain.Service.Registration.Product
     {
         public ProductService(IProductRepository repository) : base(repository) { }
 
-        //public override List<OutputProduct> CreateMultiple(List<InputCreateProduct> listInputCreateProduct)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        public override Task<BaseResult<List<OutputProduct>>> UpdateMultiple(List<InputIdentityUpdateProduct> listInputIdentityUpdateProduct)
+        public override Task<BaseResult<List<OutputProduct>>> CreateMultiple(List<InputCreateProduct> listInputCreateProduct)
         {
             throw new NotImplementedException();
         }
 
-        //public override bool DeleteMultiple(List<InputIdentityDeleteProduct> listInputIdentityDeleteProduct)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public override Task<BaseResult<List<OutputProduct>>> UpdateMultiple(List<InputIdentityUpdateProduct> listInputIdentityUpdateProduct)
+        {
+            var listOriginalProduct = 
+        }
+
+        public override Task<BaseResult<bool>> DeleteMultiple(List<InputIdentityDeleteProduct> listInputIdentityDeleteProduct)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
