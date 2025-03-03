@@ -34,7 +34,7 @@ namespace Arguments.Conversor
     //    }
     //}
 
-    public static class Conversor 
+    public static class Conversor
     {
         public static TOutput GenericConvert<TOutput, TInput>(this TInput input)
             where TOutput : new()

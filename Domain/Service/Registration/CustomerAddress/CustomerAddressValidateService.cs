@@ -2,6 +2,7 @@
 using Domain.DTO.Entity.CustomerAddress;
 using Domain.Interface.Service.CustomerAddress;
 using Domain.Service.Base;
+using Domain.Utils.Helper;
 
 namespace Domain.Service.Registration.CustomerAddress
 {
@@ -9,6 +10,8 @@ namespace Domain.Service.Registration.CustomerAddress
     {
         public void Create(List<CustomerAddressValidateDTO> listCustomerAddressValidateDTO)
         {
+            NotificationHelper.CreateNewDictionary();
+
             ValidateNullDTO(listCustomerAddressValidateDTO);
 
             (from i in RemoveIgnore(listCustomerAddressValidateDTO)
@@ -28,7 +31,7 @@ namespace Domain.Service.Registration.CustomerAddress
              where resultInvalidLenght != EnumValidateType.Valid
              let setInvalid = i.SetInvalid()
              select InvalidLenght(i.InputCreateCustomerAddress.Number, EnumValidateType.Invalid, nameof(i.InputCreateCustomerAddress.Reference), 0, 100)).ToList();
-            
+
             (from i in RemoveIgnore(listCustomerAddressValidateDTO)
              let resultInvalidLenght = InvalidLenght(i.InputCreateCustomerAddress.Complement, 0, 100)
              where resultInvalidLenght != EnumValidateType.Valid
@@ -44,6 +47,8 @@ namespace Domain.Service.Registration.CustomerAddress
 
         public void Update(List<CustomerAddressValidateDTO> listCustomerAddressValidateDTO)
         {
+            NotificationHelper.CreateNewDictionary();
+
             ValidateNullDTO(listCustomerAddressValidateDTO);
 
             //existing

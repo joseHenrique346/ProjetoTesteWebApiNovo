@@ -18,7 +18,7 @@ namespace Domain.DTO.Entity.Customer
         public InputIdentityDeleteCustomer InputIdentityDeleteCustomer { get; private set; }
         public CustomerDTO OriginalCustomer { get; set; }
 
-        public CustomerValidateDTO ValidateCreate(InputCreateCustomer inputCreateCustomer, string existingCode, InputCreateCustomer? repeatedCode,EnumValidateType birthDate)
+        public CustomerValidateDTO ValidateCreate(InputCreateCustomer inputCreateCustomer, string existingCode, InputCreateCustomer? repeatedCode, EnumValidateType birthDate)
         {
             InputCreateCustomer = inputCreateCustomer;
             ExistingCode = existingCode;

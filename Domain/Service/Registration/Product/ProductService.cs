@@ -1,16 +1,15 @@
 ﻿using Arguments.Argument.Base.ApiResponse;
 using Arguments.Argument.Registration.Product;
 using Arguments.Conversor;
-using Domain.DTO.Entity.Customer;
-using Domain.DTO.Entity.Product;
 using Domain.DTO.Entity.Product;
 using Domain.Interface.Repository;
 using Domain.Interface.Service.Product;
 using Domain.Service.Base;
+using System.Reflection;
 
 namespace Domain.Service.Registration.Product
 {
-    public class ProductService : BaseService<ProductDTO, IProductRepository, InputIdentityViewProduct, InputCreateProduct, InputUpdateProduct, InputIdentityUpdateProduct, InputIdentityDeleteProduct, ProductValidateDTO, OutputProduct>
+    public class ProductService : BaseService<ProductDTO, IProductRepository, InputIdentityViewProduct, InputCreateProduct, InputUpdateProduct, InputIdentityUpdateProduct, InputIdentityDeleteProduct, ProductValidateDTO, OutputProduct>, IProductService
     {
         private readonly IProductRepository _productRepository;
         private readonly IBrandRepository _brandRepository;
@@ -106,10 +105,21 @@ namespace Domain.Service.Registration.Product
             if (success.Count == 0 && error.Count > 0)
                 return BaseResult<bool>.Failure(error);
 
-            var validListProductmerAddress = (from i in RemoveInvalid(newListProductValidateDTO) where !i.Invalid select i).ToList();
-            await _productRepository.Delete(Conversor.GenericConvertList<ProductDTO, ProductValidateDTO>(validListProductmerAddress));
+            var validListProduct = (from i in RemoveInvalid(newListProductValidateDTO) where !i.Invalid select i).ToList();
+            await _productRepository.Delete(Conversor.GenericConvertList<ProductDTO, ProductValidateDTO>(validListProduct));
 
             return BaseResult<bool>.Success(true, [.. success, .. error]);
+        }
+
+        public Task<List<ProductDTO>> GetListByListId(List<InputIdentityViewProduct> listInputIdentityView)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static TOutput setValue<TOutput>(PropertyInfo property, TOutput output, object? value)
+        {
+            property.SetValue(output, value);
+            return output;
         }
     }
 }

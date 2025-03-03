@@ -52,11 +52,5 @@ namespace Domain.Service.Base
         {
             throw new NotImplementedException();
         }
-
-        public static TOutput setValue<TOutput>(PropertyInfo property, TOutput output, object? value)
-        {
-            property.SetValue(output, value);
-            return output;
-        }
     }
 }

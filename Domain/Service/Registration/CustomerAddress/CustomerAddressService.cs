@@ -1,12 +1,11 @@
 ﻿using Arguments.Argument.Base.ApiResponse;
 using Arguments.Argument.Registration.CustomerAddress;
 using Arguments.Conversor;
-using Domain.DTO.Entity.Brand;
 using Domain.DTO.Entity.CustomerAddress;
 using Domain.Interface.Repository;
 using Domain.Interface.Service.CustomerAddress;
 using Domain.Service.Base;
-using System.Runtime.CompilerServices;
+using System.Reflection;
 
 namespace Domain.Service.Registration.CustomerAddress
 {
@@ -106,6 +105,17 @@ namespace Domain.Service.Registration.CustomerAddress
             await _repository.Delete(Conversor.GenericConvertList<CustomerAddressDTO, CustomerAddressValidateDTO>(validListCustomerAddress));
 
             return BaseResult<bool>.Success(true, [.. success, .. error]);
+        }
+
+        public Task<List<CustomerAddressDTO>> GetListByListId(List<InputIdentityViewCustomerAddress> listInputIdentityView)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static TOutput setValue<TOutput>(PropertyInfo property, TOutput output, object? value)
+        {
+            property.SetValue(output, value);
+            return output;
         }
     }
 }

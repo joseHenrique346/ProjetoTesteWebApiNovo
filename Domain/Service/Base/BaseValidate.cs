@@ -2,7 +2,6 @@
 using Arguments.Argument.Enum;
 using Domain.DTO.Base;
 using Domain.Utils.Helper;
-using System.Security.Cryptography;
 
 namespace Domain.Service.Base
 {
@@ -106,8 +105,6 @@ namespace Domain.Service.Base
         {
             return HandleValidation(value, validateType, NotificationMessage.InvalidBirthDateMessage(customerName, birthDate), string.Empty);
         }
-
-
 
         #endregion
 

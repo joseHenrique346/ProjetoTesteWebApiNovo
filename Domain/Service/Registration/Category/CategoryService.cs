@@ -5,6 +5,7 @@ using Domain.DTO.Entity.Category;
 using Domain.Interface.Repository;
 using Domain.Interface.Service.Category;
 using Domain.Service.Base;
+using System.Reflection;
 
 namespace Domain.Service.Registration.Category
 {
@@ -12,7 +13,7 @@ namespace Domain.Service.Registration.Category
     {
         private readonly ICategoryRepository _repository;
         private readonly ICategoryValidateService _validate;
-        public CategoryService(ICategoryRepository repository, ICategoryValidateService validate) : base(repository) 
+        public CategoryService(ICategoryRepository repository, ICategoryValidateService validate) : base(repository)
         {
             _validate = validate;
             _repository = repository;
@@ -24,11 +25,11 @@ namespace Domain.Service.Registration.Category
             var selectedListOriginalCategoryDTO = listOriginalCategoryDTO.Select(i => i.Code);
 
             var listNewCategory = (from i in listInputCreateCategory
-                                select new
-                                {
-                                    InputCreateCategory = i,
-                                    RepeatedCode = selectedListOriginalCategoryDTO.FirstOrDefault(j => i.Code == j)
-                                }).ToList();
+                                   select new
+                                   {
+                                       InputCreateCategory = i,
+                                       RepeatedCode = selectedListOriginalCategoryDTO.FirstOrDefault(j => i.Code == j)
+                                   }).ToList();
             List<CategoryValidateDTO> listCategoryValidateDTO = listNewCategory.Select(i => new CategoryValidateDTO().ValidateCreate(i.InputCreateCategory, i.RepeatedCode)).ToList();
             _validate.Create(listCategoryValidateDTO);
 
@@ -50,11 +51,11 @@ namespace Domain.Service.Registration.Category
             var listOriginalCategoryDTO = await _repository.GetListByListId(listInputIdentityUpdateCategory.Select(i => i.Id).ToList());
 
             var listCategoryToUpdate = (from i in listInputIdentityUpdateCategory
-                                     select new
-                                     {
-                                         InputIdentityUpdateCategory = i,
-                                         OriginalCategory = listOriginalCategoryDTO.FirstOrDefault(j => i.Id == j.Id)
-                                     }).ToList();
+                                        select new
+                                        {
+                                            InputIdentityUpdateCategory = i,
+                                            OriginalCategory = listOriginalCategoryDTO.FirstOrDefault(j => i.Id == j.Id)
+                                        }).ToList();
 
             List<CategoryValidateDTO> listCategoryValidateDTO = listCategoryToUpdate.Select(i => new CategoryValidateDTO().ValidateUpdate(i.InputIdentityUpdateCategory, i.OriginalCategory)).ToList();
 
@@ -68,12 +69,12 @@ namespace Domain.Service.Registration.Category
             var validlistCategory = (from i in RemoveInvalid(listCategoryValidateDTO) where !i.Invalid select i).ToList();
 
             var originalCategoryUpdated = (from i in validlistCategory
-                                        from j in listOriginalCategoryDTO
-                                        where j.Id == i.InputIdentityUpdateCategory.Id
-                                        let inputUpdate = i.InputIdentityUpdateCategory.InputUpdateCategory
-                                        let description = j.Description = inputUpdate.Description
-                                        let code = j.Code = inputUpdate.Code
-                                        select j).ToList();
+                                           from j in listOriginalCategoryDTO
+                                           where j.Id == i.InputIdentityUpdateCategory.Id
+                                           let inputUpdate = i.InputIdentityUpdateCategory.InputUpdateCategory
+                                           let description = j.Description = inputUpdate.Description
+                                           let code = j.Code = inputUpdate.Code
+                                           select j).ToList();
 
             await _repository.Update(originalCategoryUpdated);
 
@@ -87,11 +88,11 @@ namespace Domain.Service.Registration.Category
             var selectedListOriginalCategoryDTO = listOriginalCategoryDTO.Select(i => i.Id).ToList();
 
             var listCategoryToDelete = (from i in listInputIdentityDeleteCategory
-                                     select new
-                                     {
-                                         InputIdentityDeleteCategory = i,
-                                         OriginalCategoryId = selectedListOriginalCategoryDTO.FirstOrDefault(j => j == i.Id)
-                                     }).ToList();
+                                        select new
+                                        {
+                                            InputIdentityDeleteCategory = i,
+                                            OriginalCategoryId = selectedListOriginalCategoryDTO.FirstOrDefault(j => j == i.Id)
+                                        }).ToList();
 
             var listCategoryValidateDTO = listCategoryToDelete.Select(i => new CategoryValidateDTO().ValidateDelete(i.InputIdentityDeleteCategory, i.OriginalCategoryId)).ToList();
             _validate.Delete(listCategoryValidateDTO);
@@ -107,6 +108,11 @@ namespace Domain.Service.Registration.Category
             await _repository.Delete(listCategoryDTO);
 
             return BaseResult<bool>.Success(true, success);
+        }
+
+        public Task<List<CategoryDTO>> GetListByListId(List<InputIdentityViewCategory> listInputIdentityView)
+        {
+            throw new NotImplementedException();
         }
     }
 }

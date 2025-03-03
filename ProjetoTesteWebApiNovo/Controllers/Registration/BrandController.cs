@@ -1,37 +1,16 @@
-﻿using Arguments.Argument.Base.ApiResponse;
-using Arguments.Argument.Registration.Brand;
+﻿using Arguments.Argument.Registration.Brand;
+using Domain.DTO.Entity.Brand;
 using Domain.Interface.Service.Brand;
+using Infrastructure.Persistence.EFCore.UnitOfWork.Interface;
 using Microsoft.AspNetCore.Mvc;
+using ProjetoTesteWebApiNovo.Controllers.Base;
 
 namespace ProjetoTesteWebApiNovo.Controllers.Registration
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class BrandController : ControllerBase
+    public class BrandController : BaseController<IBrandService, BrandDTO, OutputBrand, InputIdentityViewBrand, InputCreateBrand, InputIdentityUpdateBrand, InputIdentityDeleteBrand>
     {
-        private readonly IBrandService _brandService;
-
-        public BrandController(IBrandService brandService)
-        {
-            _brandService = brandService;
-        }
-
-        [HttpPost("create-multiple")]
-        public async Task<ActionResult<BaseResult<List<OutputBrand>>>> CreateMultiple([FromBody] List<InputCreateBrand> listInputCreateBrand)
-        {
-            if (listInputCreateBrand == null || !listInputCreateBrand.Any())
-            {
-                return BadRequest("A lista de marcas não pode estar vazia.");
-            }
-
-            var result = await _brandService.CreateMultiple(listInputCreateBrand);
-
-            if (!result.IsSuccess)
-            {
-                return BadRequest(result);
-            }
-
-            return Ok(result);
-        }
+        public BrandController(IBrandService service, IUnitOfWork unitOfWork) : base(service, unitOfWork) { }
     }
 }

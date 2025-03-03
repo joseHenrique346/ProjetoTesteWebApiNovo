@@ -129,5 +129,16 @@ namespace Domain.Service.Registration.CustomerService
 
             return BaseResult<bool>.Success(true, [.. success, .. error]);
         }
+
+        public Task<List<CustomerDTO>> GetListByListId(List<InputIdentityViewCustomer> listInputIdentityView)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static TOutput setValue<TOutput>(PropertyInfo property, TOutput output, object? value)
+        {
+            property.SetValue(output, value);
+            return output;
+        }
     }
 }

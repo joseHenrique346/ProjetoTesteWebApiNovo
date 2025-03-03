@@ -47,26 +47,28 @@ namespace Domain.Service.Registration.Brand
             ValidateNullDTO(listBrandValidateDTO);
 
             (from i in RemoveIgnore(listBrandValidateDTO)
-             let resultInvalidLenght = InvalidLenght(i.InputCreateBrand!.Code, 1, 6)
+             let code = i.InputIdentityUpdateBrand.InputUpdateBrand!.Code
+             let resultInvalidLenght = InvalidLenght(code, 1, 6)
              where resultInvalidLenght != EnumValidateType.Valid
              let setInvalid = i.SetInvalid()
-             select InvalidLenght(i.InputCreateBrand.Code, resultInvalidLenght, nameof(i.InputCreateBrand.Code), 1, 6)).ToList();
+             select InvalidLenght(code, resultInvalidLenght, nameof(code), 1, 6)).ToList();
 
             (from i in RemoveIgnore(listBrandValidateDTO)
-             let resultInvalidLenght = InvalidLenght(i.InputCreateBrand!.Description, 1, 100)
+             let description = i.InputIdentityUpdateBrand.InputUpdateBrand!.Description
+             let resultInvalidLenght = InvalidLenght(description, 1, 100)
              where resultInvalidLenght != EnumValidateType.Valid
              let setInvalid = i.SetInvalid()
-             select InvalidLenght(i.InputCreateBrand.Description, resultInvalidLenght, nameof(i.InputCreateBrand.Description), 1, 100)).ToList();
+             select InvalidLenght(description, resultInvalidLenght, nameof(description), 1, 100)).ToList();
 
             (from i in RemoveIgnore(listBrandValidateDTO)
-             where i.ExistingCode != null
+             where i.ExistingCode == null
              let setInvalid = i.SetInvalid()
-             select AlreadyExists(i.InputCreateBrand!.Code, EnumValidateType.Invalid)).ToList();
+             select AlreadyExists(i.InputIdentityUpdateBrand.InputUpdateBrand!.Code, EnumValidateType.Invalid)).ToList();
 
             (from i in RemoveIgnore(listBrandValidateDTO)
              where i.RepeatedCode != null
              let setInvalid = i.SetInvalid()
-             select RepeatedCode(i.InputCreateBrand!.Code, EnumValidateType.Invalid)).ToList();
+             select RepeatedCode(i.InputIdentityUpdateBrand.InputUpdateBrand!.Code, EnumValidateType.Invalid)).ToList();
 
             (from i in RemoveIgnore(listBrandValidateDTO)
              where i.OriginalBrand == null

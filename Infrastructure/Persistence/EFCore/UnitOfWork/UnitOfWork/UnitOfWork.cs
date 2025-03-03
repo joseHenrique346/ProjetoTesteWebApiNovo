@@ -4,38 +4,43 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Infrastructure.Persistence.EFCore.UnitOfWork.UnitOfWork
 {
-    public class UnitOfWork(AppDbContext context) : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
-        private IDbContextTransaction dbContextTransaction;
+        private IDbContextTransaction _dbContextTransaction;
         private readonly AppDbContext _context;
+
+        public UnitOfWork(AppDbContext context)
+        {
+             _context = context;
+        }
 
         public void BeginTransaction()
         {
-            if (dbContextTransaction != null)
+            if (_dbContextTransaction != null)
                 throw new InvalidOperationException("Uma transação já está em andamento.");
 
-            dbContextTransaction = _context.Database.BeginTransaction();
+            _dbContextTransaction = _context.Database.BeginTransaction();
         }
 
         public void Commit()
         {
-            if (dbContextTransaction == null)
+            if (_dbContextTransaction == null)
                 throw new InvalidOperationException("Nenhuma transação foi iniciada.");
 
             try
             {
                 _context.SaveChanges();
-                dbContextTransaction.Commit();
+                _dbContextTransaction.Commit();
             }
             catch (Exception ex)
             {
-                dbContextTransaction?.Rollback();
+                _dbContextTransaction?.Rollback();
                 throw;
             }
             finally
             {
-                dbContextTransaction?.Dispose();
-                dbContextTransaction = null;
+                _dbContextTransaction?.Dispose();
+                _dbContextTransaction = null;
             }
         }
     }

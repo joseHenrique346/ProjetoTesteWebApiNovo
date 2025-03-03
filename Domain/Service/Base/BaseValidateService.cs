@@ -4,8 +4,8 @@ using Domain.Interface.Base;
 namespace Domain.Service.Base
 {
     public class BaseValidateService<TValidateDTO> : BaseValidate<TValidateDTO>, IBaseValidateService<TValidateDTO>
-        where TValidateDTO : BaseValidateDTO 
-    { 
+        where TValidateDTO : BaseValidateDTO
+    {
         public void ValidateNullDTO(List<TValidateDTO> listValidateDTO)
         {
             (from i in RemoveIgnore(listValidateDTO)

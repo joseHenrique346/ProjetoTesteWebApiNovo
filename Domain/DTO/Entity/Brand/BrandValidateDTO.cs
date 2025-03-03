@@ -1,5 +1,4 @@
 ﻿using Arguments.Argument.Registration.Brand;
-using Arguments.Argument.Registration.Customer;
 using Domain.DTO.Base;
 
 namespace Domain.DTO.Entity.Brand
@@ -28,10 +27,11 @@ namespace Domain.DTO.Entity.Brand
             return this;
         }
 
-        public BrandValidateDTO ValidateUpdate(InputIdentityUpdateBrand inputIdentityUpdateBrand, BrandDTO originalBrand, InputIdentityUpdateBrand repeatedCodeUpdate)
+        public BrandValidateDTO ValidateUpdate(InputIdentityUpdateBrand inputIdentityUpdateBrand, BrandDTO originalBrand, string? existingCode, InputIdentityUpdateBrand repeatedCodeUpdate)
         {
             InputIdentityUpdateBrand = inputIdentityUpdateBrand;
             OriginalBrand = originalBrand;
+            ExistingCode = existingCode;
             RepeatedCodeUpdate = repeatedCodeUpdate;
             return this;
         }
