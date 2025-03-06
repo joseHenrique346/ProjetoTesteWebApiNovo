@@ -2,7 +2,6 @@
 using Arguments.Argument.Base.Crud;
 using Domain.DTO.Base;
 using Domain.Interface.Base;
-using System.Reflection;
 namespace Domain.Service.Base
 {
     public class BaseService<TDTO, TRepository, TInputIdentityView, TInputCreate, TInputUpdate, TInputIdentityUpdate, TInputIdentityDelete, TValidateDTO, TOutput> : BaseValidate<TValidateDTO>

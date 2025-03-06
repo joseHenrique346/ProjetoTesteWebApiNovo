@@ -1,10 +1,14 @@
 ﻿using Arguments.Argument.Base.ApiResponse;
+using Arguments.Argument.Enum;
 using Arguments.Argument.Registration.Brand;
 using Arguments.Conversor;
 using Domain.DTO.Entity.Brand;
 using Domain.Interface.Repository;
 using Domain.Interface.Service.Brand;
 using Domain.Service.Base;
+using Domain.Utils.Helper;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Domain.Service.Registration.Brand
@@ -31,27 +35,27 @@ namespace Domain.Service.Registration.Brand
             var newListInputBrandToValidate = (from i in listInputCreateBrand
                                                select new
                                                {
-                                                   InputCreateBrand = i,
+                                                   InputCreate = i,
                                                    ExistingCode = selectedListOriginalBrandDTO.FirstOrDefault(j => i.Code == j),
                                                    RepeatedCode = repeatedCode.FirstOrDefault()
                                                }).ToList();
 
-            List<BrandValidateDTO> listBrandValidateDTO = newListInputBrandToValidate.Select(i => new BrandValidateDTO().ValidateCreate(i.InputCreateBrand, i.ExistingCode, i.RepeatedCode)).ToList();
+            List<BrandValidateDTO> listBrandValidateDTO = newListInputBrandToValidate.Select(i => new BrandValidateDTO().ValidateCreate(i.InputCreate, i.ExistingCode, i.RepeatedCode)).ToList();
             _validate.Create(listBrandValidateDTO);
 
-            var (success, error) = GetValidationResult();
+            var listNotification = NotificationBuilder.GetAll();
 
-            if (success.Count == 0 && error.Count > 0)
-                return BaseResult<List<OutputBrand>>.Failure(error);
+            if (listNotification.Where(i => i.Type == EnumNotificationType.Error).ToList().Count > 0 && listNotification.Where(i => i.Type == EnumNotificationType.Success).ToList().Count == 0)
+                return BaseResult<List<OutputBrand>>.Failure(listNotification);
 
             var validlistBrand = (from i in RemoveInvalid(listBrandValidateDTO) where !i.Invalid select i).ToList();
 
             var ListBrandToCreate = (from i in validlistBrand
-                                     select new BrandDTO(i.InputCreateBrand.Code, i.InputCreateBrand.Description)).ToList();
+                                     select new BrandDTO(i.InputCreate.Code, i.InputCreate.Description)).ToList();
 
             var listNewBrand = await _repository.Create(ListBrandToCreate);
 
-            return BaseResult<List<OutputBrand>>.Success(Conversor.GenericConvertList<OutputBrand, BrandDTO>(listNewBrand), [.. success, .. error]);
+            return BaseResult<List<OutputBrand>>.Success(Conversor.GenericConvertList<OutputBrand, BrandDTO>(listNewBrand), listNotification);
         }
 
         public override async Task<BaseResult<List<OutputBrand>>> UpdateMultiple(List<InputIdentityUpdateBrand> listInputIdentityUpdateBrand)
@@ -77,10 +81,10 @@ namespace Domain.Service.Registration.Brand
 
             _validate.Update(listBrandValidateDTO);
 
-            var (success, error) = GetValidationResult();
+            var listNotification = NotificationBuilder.GetAll();
 
-            if (success.Count == 0 && error.Count > 0)
-                return BaseResult<List<OutputBrand>>.Failure(error);
+            if (listNotification.Where(i => i.Type == EnumNotificationType.Error).ToList().Count > 0 && listNotification.Where(i => i.Type == EnumNotificationType.Success).ToList().Count == 0)
+                return BaseResult<List<OutputBrand>>.Failure(listNotification);
 
             var validlistBrand = (from i in RemoveInvalid(listBrandValidateDTO) where !i.Invalid select i).ToList();
             var selectedValidListBrand = (from i in validlistBrand
@@ -88,14 +92,14 @@ namespace Domain.Service.Registration.Brand
 
             var originalBrandToUpdate = (from i in selectedValidListBrand.GetType().GetProperties()
                                          from j in listOriginalBrandDTOById
-                                         let properties =  j.GetType().GetProperty(i.Name)
+                                         let properties = j.GetType().GetProperty(i.Name)
                                          where properties != null
                                          let value = setValue(properties, j, i.GetValue(i.Name))
                                          select j).ToList();
 
             await _repository.Update(originalBrandToUpdate);
 
-            return BaseResult<List<OutputBrand>>.Success(Conversor.GenericConvertList<OutputBrand, BrandDTO>(originalBrandToUpdate), [.. success, .. error]);
+            return BaseResult<List<OutputBrand>>.Success(Conversor.GenericConvertList<OutputBrand, BrandDTO>(originalBrandToUpdate), listNotification);
         }
 
         public override async Task<BaseResult<bool>> DeleteMultiple(List<InputIdentityDeleteBrand> listInputIdentityDeleteBrand)
@@ -113,17 +117,17 @@ namespace Domain.Service.Registration.Brand
             var listBrandValidateDTO = newListBrandToValidate.Select(i => new BrandValidateDTO().ValidateDelete(i.InputIdentityDeleteBrand, i.OriginalBrand)).ToList();
             _validate.Delete(listBrandValidateDTO);
 
-            var (success, error) = GetValidationResult();
+            var listNotification = NotificationBuilder.GetAll();
 
-            if (success.Count == 0 && error.Count > 0)
-                return BaseResult<bool>.Failure(error);
+            if (listNotification.Where(i => i.Type == EnumNotificationType.Error).ToList().Count > 0 && listNotification.Where(i => i.Type == EnumNotificationType.Success).ToList().Count == 0)
+                return BaseResult<bool>.Failure(listNotification);
 
             var newValidBrandList = (from i in RemoveInvalid(listBrandValidateDTO) where !i.Invalid select i).ToList();
             var listBrandDTOToDelete = Conversor.GenericConvertList<BrandDTO, BrandValidateDTO>(newValidBrandList);
 
             await _repository.Delete(listBrandDTOToDelete);
 
-            return BaseResult<bool>.Success(true, [.. success, .. error]);
+            return BaseResult<bool>.Success(true, listNotification);
         }
 
         public Task<List<BrandDTO>> GetListByListId(List<InputIdentityViewBrand> listInputIdentityView)

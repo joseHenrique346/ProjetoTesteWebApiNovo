@@ -1,5 +1,4 @@
-﻿using Arguments.Argument.Base.ApiResponse;
-using Arguments.Argument.Registration.Product;
+﻿using Arguments.Argument.Registration.Product;
 using Domain.DTO.Entity.Product;
 using Domain.Interface.Service.Base;
 

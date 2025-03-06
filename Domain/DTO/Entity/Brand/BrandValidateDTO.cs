@@ -5,7 +5,7 @@ namespace Domain.DTO.Entity.Brand
 {
     public class BrandValidateDTO : BaseValidateDTO
     {
-        public InputCreateBrand InputCreateBrand { get; private set; }
+        public InputCreateBrand InputCreate { get; private set; }
         public string? ExistingCode { get; private set; }
         public InputCreateBrand? RepeatedCode { get; private set; }
 
@@ -19,9 +19,9 @@ namespace Domain.DTO.Entity.Brand
         public long? OriginalBrandId { get; set; }
         public BrandValidateDTO() { }
 
-        public BrandValidateDTO ValidateCreate(InputCreateBrand inputCreateBrand, string? existingCode, InputCreateBrand repeatedCode)
+        public BrandValidateDTO ValidateCreate(InputCreateBrand inputCreate, string? existingCode, InputCreateBrand repeatedCode)
         {
-            InputCreateBrand = inputCreateBrand;
+            InputCreate = inputCreate;
             ExistingCode = existingCode;
             RepeatedCode = repeatedCode;
             return this;

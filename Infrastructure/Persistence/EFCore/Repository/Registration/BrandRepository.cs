@@ -6,7 +6,6 @@ using Infrastructure.Persistence.EFCore.Context;
 using Infrastructure.Persistence.EFCore.Entity.Registration;
 using Infrastructure.Persistence.EFCore.Repository.Base;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace Infrastructure.Persistence.EFCore.Repository.Registration
 {

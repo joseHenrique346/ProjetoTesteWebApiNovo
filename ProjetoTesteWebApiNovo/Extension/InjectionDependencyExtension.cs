@@ -25,7 +25,7 @@ namespace ProjetoTesteWebApiNovo.Extension
             services.AddScoped<ICustomerAddressService, CustomerAddressService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();
-            
+
             services.AddScoped<IBrandValidateService, BrandValidateService>();
             services.AddScoped<ICustomerAddressValidateService, CustomerAddressValidateService>();
             services.AddScoped<ICustomerValidateService, CustomerValidateService>();

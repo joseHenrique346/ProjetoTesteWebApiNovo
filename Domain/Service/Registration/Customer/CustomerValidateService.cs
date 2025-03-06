@@ -10,7 +10,7 @@ namespace Domain.Service.Registration.Customer
     {
         public void Create(List<CustomerValidateDTO> listCustomerValidateDTO)
         {
-            NotificationHelper.CreateNewDictionary();
+            NotificationBuilder.CreateDictionary();
 
             ValidateNullDTO(listCustomerValidateDTO);
 
@@ -32,43 +32,43 @@ namespace Domain.Service.Registration.Customer
 
             (from i in RemoveIgnore(listCustomerValidateDTO)
              let code = i.InputCreateCustomer.Code
-             let resultInvalidLenght = InvalidLenght(code, 1, 6)
-             where resultInvalidLenght != EnumValidateType.Valid
+             let resultInvalidLength= InvalidLenght(code, 1, 6)
+             where resultInvalidLength!= EnumValidateType.Valid
              let setInvalid = i.SetInvalid()
-             select InvalidLenght(code, resultInvalidLenght, nameof(code), 1, 6)).ToList();
+             select InvalidLenght(code, resultInvalidLength, nameof(code), 1, 6)).ToList();
 
             (from i in RemoveIgnore(listCustomerValidateDTO)
              let firstName = i.InputCreateCustomer.FirstName
-             let resultInvalidLenght = InvalidLenght(firstName, 1, 100)
-             where resultInvalidLenght != EnumValidateType.Valid
+             let resultInvalidLength= InvalidLenght(firstName, 1, 100)
+             where resultInvalidLength!= EnumValidateType.Valid
              let setInvalid = i.SetInvalid()
-             select InvalidLenght(i.InputCreateCustomer.Code, resultInvalidLenght, nameof(firstName), 1, 100)).ToList();
+             select InvalidLenght(i.InputCreateCustomer.Code, resultInvalidLength, nameof(firstName), 1, 100)).ToList();
 
             (from i in RemoveIgnore(listCustomerValidateDTO)
              let lastName = i.InputCreateCustomer.LastName
-             let resultInvalidLenght = InvalidLenght(lastName, 1, 100)
-             where resultInvalidLenght != EnumValidateType.Valid
+             let resultInvalidLength= InvalidLenght(lastName, 1, 100)
+             where resultInvalidLength!= EnumValidateType.Valid
              let setInvalid = i.SetInvalid()
-             select InvalidLenght(i.InputCreateCustomer.Code, resultInvalidLenght, nameof(lastName), 1, 100)).ToList();
+             select InvalidLenght(i.InputCreateCustomer.Code, resultInvalidLength, nameof(lastName), 1, 100)).ToList();
 
             (from i in RemoveIgnore(listCustomerValidateDTO)
              let document = i.InputCreateCustomer.Document
-             let resultInvalidLenght = InvalidLenght(document, 11)
-             where resultInvalidLenght != EnumValidateType.Valid
+             let resultInvalidLength= InvalidLenght(document, 11)
+             where resultInvalidLength!= EnumValidateType.Valid
              let setInvalid = i.SetInvalid()
-             select InvalidLenght(i.InputCreateCustomer.Code, resultInvalidLenght, nameof(document), 11)).ToList();
+             select InvalidLenght(i.InputCreateCustomer.Code, resultInvalidLength, nameof(document), 11)).ToList();
 
             (from i in RemoveIgnore(listCustomerValidateDTO)
              let phone = i.InputCreateCustomer.Phone
-             let resultInvalidLenght = InvalidLenght(phone, 11)
-             where resultInvalidLenght != EnumValidateType.Valid
+             let resultInvalidLength= InvalidLenght(phone, 11)
+             where resultInvalidLength!= EnumValidateType.Valid
              let setInvalid = i.SetInvalid()
-             select InvalidLenght(i.InputCreateCustomer.Code, resultInvalidLenght, nameof(phone), 11)).ToList();
+             select InvalidLenght(i.InputCreateCustomer.Code, resultInvalidLength, nameof(phone), 11)).ToList();
         }
 
         public void Update(List<CustomerValidateDTO> listCustomerValidateDTO)
         {
-            NotificationHelper.CreateNewDictionary();
+            NotificationBuilder.CreateDictionary();
 
             ValidateNullDTO(listCustomerValidateDTO);
 
@@ -90,42 +90,44 @@ namespace Domain.Service.Registration.Customer
 
             (from i in RemoveIgnore(listCustomerValidateDTO)
              let code = i.InputIdentityUpdateCustomer.InputUpdateCustomer.Code
-             let resultInvalidLenght = InvalidLenght(code, 1, 6)
-             where resultInvalidLenght != EnumValidateType.Valid
+             let resultInvalidLength= InvalidLenght(code, 1, 6)
+             where resultInvalidLength!= EnumValidateType.Valid
              let setInvalid = i.SetInvalid()
-             select InvalidLenght(code, resultInvalidLenght, nameof(code), 1, 6)).ToList();
+             select InvalidLenght(code, resultInvalidLength, nameof(code), 1, 6)).ToList();
 
             (from i in RemoveIgnore(listCustomerValidateDTO)
              let firstName = i.InputIdentityUpdateCustomer.InputUpdateCustomer.FirstName
-             let resultInvalidLenght = InvalidLenght(firstName, 1, 100)
-             where resultInvalidLenght != EnumValidateType.Valid
+             let resultInvalidLength= InvalidLenght(firstName, 1, 100)
+             where resultInvalidLength!= EnumValidateType.Valid
              let setInvalid = i.SetInvalid()
-             select InvalidLenght(i.InputIdentityUpdateCustomer.InputUpdateCustomer.Code, resultInvalidLenght, nameof(firstName), 1, 100)).ToList();
+             select InvalidLenght(i.InputIdentityUpdateCustomer.InputUpdateCustomer.Code, resultInvalidLength, nameof(firstName), 1, 100)).ToList();
 
             (from i in RemoveIgnore(listCustomerValidateDTO)
              let lastName = i.InputIdentityUpdateCustomer.InputUpdateCustomer.LastName
-             let resultInvalidLenght = InvalidLenght(lastName, 1, 100)
-             where resultInvalidLenght != EnumValidateType.Valid
+             let resultInvalidLength= InvalidLenght(lastName, 1, 100)
+             where resultInvalidLength!= EnumValidateType.Valid
              let setInvalid = i.SetInvalid()
-             select InvalidLenght(i.InputIdentityUpdateCustomer.InputUpdateCustomer.Code, resultInvalidLenght, nameof(lastName), 1, 100)).ToList();
+             select InvalidLenght(i.InputIdentityUpdateCustomer.InputUpdateCustomer.Code, resultInvalidLength, nameof(lastName), 1, 100)).ToList();
 
             (from i in RemoveIgnore(listCustomerValidateDTO)
              let document = i.InputIdentityUpdateCustomer.InputUpdateCustomer.Document
-             let resultInvalidLenght = InvalidLenght(document, 11)
-             where resultInvalidLenght != EnumValidateType.Valid
+             let resultInvalidLength= InvalidLenght(document, 11)
+             where resultInvalidLength!= EnumValidateType.Valid
              let setInvalid = i.SetInvalid()
-             select InvalidLenght(i.InputIdentityUpdateCustomer.InputUpdateCustomer.Code, resultInvalidLenght, nameof(document), 11)).ToList();
+             select InvalidLenght(i.InputIdentityUpdateCustomer.InputUpdateCustomer.Code, resultInvalidLength, nameof(document), 11)).ToList();
 
             (from i in RemoveIgnore(listCustomerValidateDTO)
              let phone = i.InputIdentityUpdateCustomer.InputUpdateCustomer.Phone
-             let resultInvalidLenght = InvalidLenght(phone, 11)
-             where resultInvalidLenght != EnumValidateType.Valid
+             let resultInvalidLength= InvalidLenght(phone, 11)
+             where resultInvalidLength!= EnumValidateType.Valid
              let setInvalid = i.SetInvalid()
-             select InvalidLenght(i.InputIdentityUpdateCustomer.InputUpdateCustomer.Code, resultInvalidLenght, nameof(phone), 11)).ToList();
+             select InvalidLenght(i.InputIdentityUpdateCustomer.InputUpdateCustomer.Code, resultInvalidLength, nameof(phone), 11)).ToList();
         }
 
         public void Delete(List<CustomerValidateDTO> listCustomerValidateDTO)
         {
+            NotificationBuilder.CreateDictionary();
+
             ValidateNullDTO(listCustomerValidateDTO);
         }
 

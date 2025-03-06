@@ -10,7 +10,7 @@ namespace Domain.Service.Registration.Category
     {
         public void Create(List<CategoryValidateDTO> listCategoryValidateDTO)
         {
-            NotificationHelper.CreateNewDictionary();
+            NotificationBuilder.CreateDictionary();
 
             (from i in RemoveIgnore(listCategoryValidateDTO)
              where listCategoryValidateDTO == null
@@ -18,16 +18,16 @@ namespace Domain.Service.Registration.Category
              select Invalid(listCategoryValidateDTO.IndexOf(i))).ToList();
 
             (from i in RemoveIgnore(listCategoryValidateDTO)
-             let resultInvalidLenght = InvalidLenght(i.InputCreateCategory!.Code, 1, 6)
-             where resultInvalidLenght != EnumValidateType.Valid
+             let resultInvalidLength = InvalidLength(i.InputCreateCategory!.Code, 1, 6)
+             where resultInvalidLength != EnumValidateType.Valid
              let setInvalid = i.SetInvalid()
-             select InvalidLenght(i.InputCreateCategory.Code, resultInvalidLenght, nameof(i.InputCreateCategory.Code), 1, 6)).ToList();
+             select InvalidLength(i.InputCreateCategory.Code, nameof(i.InputCreateCategory.Code), 1, 6, resultInvalidLength)).ToList();
 
             (from i in RemoveIgnore(listCategoryValidateDTO)
-             let resultInvalidLenght = InvalidLenght(i.InputCreateCategory!.Description, 1, 100)
-             where resultInvalidLenght != EnumValidateType.Valid
+             let resultInvalidLength = InvalidLength(i.InputCreateCategory!.Description, 1, 100)
+             where resultInvalidLength != EnumValidateType.Valid
              let setInvalid = i.SetInvalid()
-             select InvalidLenght(i.InputCreateCategory.Code, resultInvalidLenght, nameof(i.InputCreateCategory.Description), 1, 100)).ToList();
+             select InvalidLength(i.InputCreateCategory.Code, nameof(i.InputCreateCategory.Description), 1, 100, resultInvalidLength)).ToList();
 
             (from i in RemoveIgnore(listCategoryValidateDTO)
              where i.RepeatedCode != null
@@ -40,7 +40,7 @@ namespace Domain.Service.Registration.Category
 
         public void Update(List<CategoryValidateDTO> listCategoryValidateDTO)
         {
-            NotificationHelper.CreateNewDictionary();
+            NotificationBuilder.CreateDictionary();
 
             (from i in RemoveIgnore(listCategoryValidateDTO)
              where listCategoryValidateDTO == null
@@ -48,16 +48,16 @@ namespace Domain.Service.Registration.Category
              select Invalid(listCategoryValidateDTO.IndexOf(i))).ToList();
 
             (from i in RemoveIgnore(listCategoryValidateDTO)
-             let resultInvalidLenght = InvalidLenght(i.InputCreateCategory!.Code, 1, 6)
-             where resultInvalidLenght != EnumValidateType.Valid
+             let resultInvalidLength = InvalidLength(i.InputCreateCategory!.Code, 1, 6)
+             where resultInvalidLength != EnumValidateType.Valid
              let setInvalid = i.SetInvalid()
-             select InvalidLenght(i.InputCreateCategory.Code, resultInvalidLenght, nameof(i.InputCreateCategory.Code), 1, 6)).ToList();
+             select InvalidLength(i.InputCreateCategory.Code, nameof(i.InputCreateCategory.Code), 1, 6, resultInvalidLength)).ToList();
 
             (from i in RemoveIgnore(listCategoryValidateDTO)
-             let resultInvalidLenght = InvalidLenght(i.InputCreateCategory!.Description, 1, 100)
-             where resultInvalidLenght != EnumValidateType.Valid
+             let resultInvalidLength = InvalidLength(i.InputCreateCategory!.Description, 1, 100)
+             where resultInvalidLength != EnumValidateType.Valid
              let setInvalid = i.SetInvalid()
-             select InvalidLenght(i.InputCreateCategory.Description, resultInvalidLenght, nameof(i.InputCreateCategory.Description), 1, 100)).ToList();
+             select InvalidLength(i.InputCreateCategory.Description, nameof(i.InputCreateCategory.Description), 1, 100, resultInvalidLength)).ToList();
 
             (from i in RemoveIgnore(listCategoryValidateDTO)
              where i.OriginalCategory == null
@@ -70,6 +70,8 @@ namespace Domain.Service.Registration.Category
 
         public void Delete(List<CategoryValidateDTO> listCategoryValidateDTO)
         {
+            NotificationBuilder.CreateDictionary();
+
             (from i in RemoveIgnore(listCategoryValidateDTO)
              where listCategoryValidateDTO == null
              let setIgnore = i.SetIgnore()

@@ -11,7 +11,7 @@ namespace Infrastructure.Persistence.EFCore.UnitOfWork.UnitOfWork
 
         public UnitOfWork(AppDbContext context)
         {
-             _context = context;
+            _context = context;
         }
 
         public void BeginTransaction()

@@ -1,5 +1,4 @@
-﻿using Arguments.Argument.Base.ApiResponse;
-using Arguments.Argument.Registration.CustomerAddress;
+﻿using Arguments.Argument.Registration.CustomerAddress;
 using Domain.DTO.Entity.CustomerAddress;
 using Domain.Interface.Service.Base;
 

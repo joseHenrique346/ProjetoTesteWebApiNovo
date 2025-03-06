@@ -9,21 +9,21 @@ namespace Domain.Service.Registration.Product
     {
         public void Create(List<ProductValidateDTO> listProductValidateService)
         {
-            NotificationHelper.CreateNewDictionary();
+            NotificationBuilder.CreateDictionary();
 
             ValidateNullDTO(listProductValidateService);
         }
 
         public void Update(List<ProductValidateDTO> listProductValidateService)
         {
-            NotificationHelper.CreateNewDictionary();
+            NotificationBuilder.CreateDictionary();
 
             ValidateNullDTO(listProductValidateService);
         }
 
         public void Delete(List<ProductValidateDTO> listProductValidateService)
         {
-            NotificationHelper.CreateNewDictionary();
+            NotificationBuilder.CreateDictionary();
 
             ValidateNullDTO(listProductValidateService);
         }

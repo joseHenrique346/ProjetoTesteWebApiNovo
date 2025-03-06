@@ -1,11 +1,9 @@
-﻿using Arguments.Argument.Base.ApiResponse;
-using Arguments.Argument.Registration.Category;
+﻿using Arguments.Argument.Registration.Category;
 using Arguments.Conversor;
 using Domain.DTO.Entity.Category;
 using Domain.Interface.Repository;
 using Domain.Interface.Service.Category;
 using Domain.Service.Base;
-using System.Reflection;
 
 namespace Domain.Service.Registration.Category
 {

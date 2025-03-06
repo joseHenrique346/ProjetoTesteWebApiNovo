@@ -1,5 +1,4 @@
-﻿using Arguments.Argument.Base.ApiResponse;
-using Arguments.Argument.Enum;
+﻿using Arguments.Argument.Enum;
 using Arguments.Argument.Registration.Customer;
 using Arguments.Conversor;
 using Domain.DTO.Entity.Customer;
