@@ -1,5 +1,4 @@
-﻿using Arguments.Argument.Base.ApiResponse;
-using Arguments.Argument.Enum;
+﻿using Arguments.Argument.Enum;
 using Domain.DTO.Base;
 
 namespace Domain.Interface.Service.Base
@@ -22,7 +21,9 @@ namespace Domain.Interface.Service.Base
 
         bool CreateSuccessNotification(string key, string description);
 
-        bool CreateSuccessNotification(string key);
+        bool UpdateSuccessNotification(string key, string description);
+
+        bool DeleteSuccessNotification(string key);
 
         void CreateErrorNotification(string key, string validationMessage);
     }

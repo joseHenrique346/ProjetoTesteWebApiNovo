@@ -12,60 +12,60 @@ namespace Domain.Service.Registration.Category
         {
             NotificationBuilder.CreateDictionary();
 
-            (from i in RemoveIgnore(listCategoryValidateDTO)
-             where listCategoryValidateDTO == null
-             let setIgnore = i.SetIgnore()
-             select Invalid(listCategoryValidateDTO.IndexOf(i))).ToList();
+            //(from i in RemoveIgnore(listCategoryValidateDTO)
+            // where listCategoryValidateDTO == null
+            // let setIgnore = i.SetIgnore()
+            // select Invalid(listCategoryValidateDTO.IndexOf(i))).ToList();
 
             (from i in RemoveIgnore(listCategoryValidateDTO)
              let resultInvalidLength = InvalidLength(i.InputCreateCategory!.Code, 1, 6)
              where resultInvalidLength != EnumValidateType.Valid
              let setInvalid = i.SetInvalid()
-             select InvalidLength(i.InputCreateCategory.Code, nameof(i.InputCreateCategory.Code), 1, 6, resultInvalidLength)).ToList();
+             select InvalidLength(i.InputCreateCategory.Code, nameof(i.InputCreateCategory.Code), 1, 6)).ToList();
 
             (from i in RemoveIgnore(listCategoryValidateDTO)
              let resultInvalidLength = InvalidLength(i.InputCreateCategory!.Description, 1, 100)
              where resultInvalidLength != EnumValidateType.Valid
              let setInvalid = i.SetInvalid()
-             select InvalidLength(i.InputCreateCategory.Code, nameof(i.InputCreateCategory.Description), 1, 100, resultInvalidLength)).ToList();
+             select InvalidLength(i.InputCreateCategory.Code, nameof(i.InputCreateCategory.Description), 1, 100)).ToList();
 
             (from i in RemoveIgnore(listCategoryValidateDTO)
              where i.RepeatedCode != null
              let setInvalid = i.SetInvalid()
-             select AlreadyExists(i.InputCreateCategory!.Code, EnumValidateType.Invalid)).ToList();
+             select AlreadyExists(i.InputCreateCategory!.Code)).ToList();
 
             (from i in RemoveInvalid(listCategoryValidateDTO)
-             select AddSuccessMessage(i.InputCreateCategory!.Code, NotificationMessagesKey.SuccesfullyCreatedKey)).ToList();
+             select CreateSuccessNotification(i.InputCreateCategory!.Code, i.InputCreateCategory.Description)).ToList();
         }
 
         public void Update(List<CategoryValidateDTO> listCategoryValidateDTO)
         {
             NotificationBuilder.CreateDictionary();
 
-            (from i in RemoveIgnore(listCategoryValidateDTO)
-             where listCategoryValidateDTO == null
-             let setIgnore = i.SetIgnore()
-             select Invalid(listCategoryValidateDTO.IndexOf(i))).ToList();
+            //(from i in RemoveIgnore(listCategoryValidateDTO)
+            // where listCategoryValidateDTO == null
+            // let setIgnore = i.SetIgnore()
+            // select Invalid(listCategoryValidateDTO.IndexOf(i))).ToList();
 
             (from i in RemoveIgnore(listCategoryValidateDTO)
              let resultInvalidLength = InvalidLength(i.InputCreateCategory!.Code, 1, 6)
              where resultInvalidLength != EnumValidateType.Valid
              let setInvalid = i.SetInvalid()
-             select InvalidLength(i.InputCreateCategory.Code, nameof(i.InputCreateCategory.Code), 1, 6, resultInvalidLength)).ToList();
+             select InvalidLength(i.InputCreateCategory.Code, nameof(i.InputCreateCategory.Code), 1, 6)).ToList();
 
             (from i in RemoveIgnore(listCategoryValidateDTO)
              let resultInvalidLength = InvalidLength(i.InputCreateCategory!.Description, 1, 100)
              where resultInvalidLength != EnumValidateType.Valid
              let setInvalid = i.SetInvalid()
-             select InvalidLength(i.InputCreateCategory.Description, nameof(i.InputCreateCategory.Description), 1, 100, resultInvalidLength)).ToList();
+             select InvalidLength(i.InputCreateCategory.Description, nameof(i.InputCreateCategory.Description), 1, 100)).ToList();
 
             (from i in RemoveIgnore(listCategoryValidateDTO)
              where i.OriginalCategory == null
              let setIgnore = i.SetIgnore()
-             select Invalid(listCategoryValidateDTO.IndexOf(i))).ToList();
+             select OriginalNotFound(i.InputIdentityUpdateCategory.Id)).ToList();
 
             (from i in RemoveInvalid(listCategoryValidateDTO)
-             select AddSuccessMessage((i.InputIdentityUpdateCategory!.Id).ToString(), NotificationMessagesKey.SuccesfullyUpdatedKey)).ToList();
+             select CreateSuccessNotification((i.InputIdentityUpdateCategory!.Id).ToString(), i.InputIdentityUpdateCategory.InputUpdateCategory.Description)).ToList();
         }
 
         public void Delete(List<CategoryValidateDTO> listCategoryValidateDTO)
@@ -75,15 +75,15 @@ namespace Domain.Service.Registration.Category
             (from i in RemoveIgnore(listCategoryValidateDTO)
              where listCategoryValidateDTO == null
              let setIgnore = i.SetIgnore()
-             select Invalid(listCategoryValidateDTO.IndexOf(i))).ToList();
+             select OriginalNotFound(i.InputIdentityDeleteCategory.Id)).ToList();
 
             (from i in RemoveIgnore(listCategoryValidateDTO)
              where i.OriginalCategoryId == default
              let setInvalid = i.SetInvalid()
-             select Invalid(listCategoryValidateDTO.IndexOf(i))).ToList();
+             select OriginalNotFound(i.InputIdentityDeleteCategory.Id)).ToList();
 
             (from i in RemoveInvalid(listCategoryValidateDTO)
-             select AddSuccessMessage((i.InputIdentityDeleteCategory!.Id).ToString(), NotificationMessagesKey.SuccesfullyDeletedKey)).ToList();
+             select DeleteSuccessNotification((i.InputIdentityDeleteCategory!.Id).ToString())).ToList();
         }
     }
 }

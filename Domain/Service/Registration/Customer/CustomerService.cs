@@ -1,10 +1,12 @@
-﻿using Arguments.Argument.Enum;
+﻿using Arguments.Argument.Base.ApiResponse;
+using Arguments.Argument.Enum;
 using Arguments.Argument.Registration.Customer;
 using Arguments.Conversor;
 using Domain.DTO.Entity.Customer;
 using Domain.Interface.Repository;
 using Domain.Interface.Service.Customer;
 using Domain.Service.Base;
+using Domain.Utils.Helper;
 using System.Reflection;
 
 namespace Domain.Service.Registration.CustomerService
@@ -35,29 +37,29 @@ namespace Domain.Service.Registration.CustomerService
             var listNewInputCustomerToValidate = (from i in listInputCreateCustomer
                                                   select new
                                                   {
-                                                      InputCreateCustomer = i,
+                                                      InputCreate = i,
                                                       ExistingCode = selectedListOriginalCustomer.FirstOrDefault(j => j == i.Code),
                                                       RepeatedCode = repeatedCode.FirstOrDefault(),
                                                       InvalidBirthDate = validateBirthDate.FirstOrDefault()
                                                   }).ToList();
 
-            var listNewCustomerValidateDTO = listNewInputCustomerToValidate.Select(i => new CustomerValidateDTO().ValidateCreate(i.InputCreateCustomer, i.ExistingCode, i.RepeatedCode, i.InvalidBirthDate)).ToList();
+            var listNewCustomerValidateDTO = listNewInputCustomerToValidate.Select(i => new CustomerValidateDTO().ValidateCreate(i.InputCreate, i.ExistingCode, i.RepeatedCode, i.InvalidBirthDate)).ToList();
             _validate.Create(listNewCustomerValidateDTO);
 
-            var (success, error) = GetValidationResult();
+            var listNotification = NotificationBuilder.GetAll();
 
-            if (success.Count == 0 && error.Count > 0)
-                return BaseResult<List<OutputCustomer>>.Failure(error);
+            if (listNotification.Where(i => i.Type == EnumNotificationType.Error).ToList().Count > 0 && listNotification.Where(i => i.Type == EnumNotificationType.Success).ToList().Count == 0)
+                return BaseResult<List<OutputCustomer>>.Failure(listNotification);
 
             var validlistCustomer = (from i in RemoveInvalid(listNewCustomerValidateDTO) where !i.Invalid select i).ToList();
 
             var newListCustomer = (from i in validlistCustomer
-                                   let create = i.InputCreateCustomer
+                                   let create = i.InputCreate
                                    select new CustomerDTO(create.FirstName, create.LastName, create.Code, create.Phone, create.BirthDate, create.Document)).ToList();
 
             await _repository.Create(newListCustomer);
 
-            return BaseResult<List<OutputCustomer>>.Success(Conversor.GenericConvertList<OutputCustomer, CustomerValidateDTO>(listNewCustomerValidateDTO), [.. success, .. error]);
+            return BaseResult<List<OutputCustomer>>.Success(Conversor.GenericConvertList<OutputCustomer, CustomerValidateDTO>(listNewCustomerValidateDTO), listNotification);
         }
 
         public override async Task<BaseResult<List<OutputCustomer>>> UpdateMultiple(List<InputIdentityUpdateCustomer> listInputIdentityUpdateCustomer)
@@ -75,32 +77,30 @@ namespace Domain.Service.Registration.CustomerService
             var newListInputCustomerToValidate = (from i in listInputIdentityUpdateCustomer
                                                   select new
                                                   {
-                                                      InputUpdateCustomer = i,
+                                                      InputUpdate = i.InputUpdateCustomer,
                                                       ExistingCode = listOriginalCustomer.FirstOrDefault(j => j.Code == i.InputUpdateCustomer.Code && j.Id != i.Id).Code,
                                                       RepeatedCode = repeatedCode.FirstOrDefault(),
                                                       InvalidBirthDate = validateBirthDate.FirstOrDefault()
                                                   }).ToList();
 
-            var listNewCustomerValidateDTO = newListInputCustomerToValidate.Select(i => new CustomerValidateDTO().ValidateUpdate(i.InputUpdateCustomer, i.ExistingCode, i.RepeatedCode, i.InvalidBirthDate)).ToList();
+            var listNewCustomerValidateDTO = newListInputCustomerToValidate.Select(i => new CustomerValidateDTO().ValidateUpdate(i.InputUpdate, i.ExistingCode, i.RepeatedCode, i.InvalidBirthDate)).ToList();
             _validate.Update(listNewCustomerValidateDTO);
 
-            var (success, error) = GetValidationResult();
+            var listNotification = NotificationBuilder.GetAll();
 
-            if (success.Count == 0 && error.Count > 0)
-                return BaseResult<List<OutputCustomer>>.Failure(error);
+            if (listNotification.Where(i => i.Type == EnumNotificationType.Error).ToList().Count > 0 && listNotification.Where(i => i.Type == EnumNotificationType.Success).ToList().Count == 0)
+                return BaseResult<List<OutputCustomer>>.Failure(listNotification);
 
-            var validlistCustomer = (from i in RemoveInvalid(listNewCustomerValidateDTO) where !i.Invalid select i).ToList();
+            var validListCustomer = (from i in RemoveInvalid(listNewCustomerValidateDTO) where !i.Invalid select i).ToList();
 
-            var listCustomerToUpdate = (from i in validlistCustomer.GetType().GetProperties()
-                                        from j in listOriginalCustomer
-                                        let properties = j.GetType().GetProperty(i.Name)
-                                        where properties != null
-                                        let value = setValue(properties, j, i.GetValue(i.Name))
-                                        select value).ToList();
+            (from i in validListCustomer
+             select UpdateDTO<CustomerDTO, InputUpdateCustomer>(i.OriginalCustomer, i.InputUpdate)).ToList();
 
-            await _repository.Update(listOriginalCustomer);
+            var originalCustomerListToUpdate = validListCustomer.Select(i => i.OriginalCustomer).ToList();
 
-            return BaseResult<List<OutputCustomer>>.Success(Conversor.GenericConvertList<OutputCustomer, CustomerValidateDTO>(listNewCustomerValidateDTO), [.. success, .. error]);
+            await _repository.Update(originalCustomerListToUpdate);
+
+            return BaseResult<List<OutputCustomer>>.Success(Conversor.GenericConvertList<OutputCustomer, CustomerDTO>(originalCustomerListToUpdate), listNotification);
         }
 
         public override async Task<BaseResult<bool>> DeleteMultiple(List<InputIdentityDeleteCustomer> listInputIdentityDeleteCustomer)
@@ -117,16 +117,16 @@ namespace Domain.Service.Registration.CustomerService
             var listNewCustomerValidateDTO = newListCustomerToDelete.Select(i => new CustomerValidateDTO().ValidateDelete(i.InputIdentityDeleteCustomer, i.OriginalCustomer)).ToList();
             _validate.Delete(listNewCustomerValidateDTO);
 
-            var (success, error) = GetValidationResult();
+            var listNotification = NotificationBuilder.GetAll();
 
-            if (success.Count == 0 && error.Count > 0)
-                return BaseResult<bool>.Failure(error);
+            if (listNotification.Where(i => i.Type == EnumNotificationType.Error).ToList().Count > 0 && listNotification.Where(i => i.Type == EnumNotificationType.Success).ToList().Count == 0)
+                return BaseResult<bool>.Failure(listNotification);
 
             var validCustomerToDelete = (from i in RemoveInvalid(listNewCustomerValidateDTO) where !i.Invalid select i).ToList();
 
             await _repository.Delete(listOriginalCustomer);
 
-            return BaseResult<bool>.Success(true, [.. success, .. error]);
+            return BaseResult<bool>.Success(true, listNotification);
         }
 
         public Task<List<CustomerDTO>> GetListByListId(List<InputIdentityViewCustomer> listInputIdentityView)

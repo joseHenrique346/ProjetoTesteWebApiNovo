@@ -1,5 +1,4 @@
-﻿using Arguments.Argument.Enum;
-using Domain.DTO.Entity.Brand;
+﻿using Domain.DTO.Entity.Brand;
 using Domain.Interface.Service.Brand;
 using Domain.Service.Base;
 using Domain.Utils.Helper;
@@ -38,22 +37,26 @@ namespace Domain.Service.Registration.Brand
 
             ValidateNullDTO(listBrandValidateDTO);
 
-            (from i in RemoveIgnore(listBrandValidateDTO)
-             let code = i.InputIdentityUpdateBrand.InputUpdateBrand!.Code
-             let resultInvalidLength = InvalidLength(code, 1, 6)
-             where resultInvalidLength != EnumValidateType.Valid
-             let setInvalid = i.SetInvalid()
-             select InvalidLength(code, nameof(code), 1, 6)).ToList();
+            InvalidLengthValidation(listBrandValidateDTO, "Code", "Code", "InputUpdate", 1, 6);
+
+            InvalidLengthValidation(listBrandValidateDTO, "Code", "Description", "InputUpdate", 1, 100);
+
+            //(from i in RemoveIgnore(listBrandValidateDTO)
+            // let code = i.InputUpdate!.Code
+            // let resultInvalidLength = InvalidLength(code, 1, 6)
+            // where resultInvalidLength != EnumValidateType.Valid
+            // let setInvalid = i.SetInvalid()
+            // select InvalidLength(code, nameof(code), 1, 6)).ToList();
+
+            //(from i in RemoveIgnore(listBrandValidateDTO)
+            // let description = i.InputIdentityUpdateBrand.InputUpdateBrand!.Description
+            // let resultInvalidLength = InvalidLength(description, 1, 100)
+            // where resultInvalidLength != EnumValidateType.Valid
+            // let setInvalid = i.SetInvalid()
+            // select InvalidLength(description, nameof(description), 1, 100)).ToList();
 
             (from i in RemoveIgnore(listBrandValidateDTO)
-             let description = i.InputIdentityUpdateBrand.InputUpdateBrand!.Description
-             let resultInvalidLength = InvalidLength(description, 1, 100)
-             where resultInvalidLength != EnumValidateType.Valid
-             let setInvalid = i.SetInvalid()
-             select InvalidLength(description, nameof(description), 1, 100)).ToList();
-
-            (from i in RemoveIgnore(listBrandValidateDTO)
-             where i.ExistingCode == null
+             where i.ExistingCode != null
              let setInvalid = i.SetInvalid()
              select AlreadyExists(i.InputIdentityUpdateBrand.InputUpdateBrand!.Code)).ToList();
 
@@ -68,7 +71,7 @@ namespace Domain.Service.Registration.Brand
              select OriginalNotFound(i.InputIdentityUpdateBrand.Id)).ToList();
 
             (from i in RemoveInvalid(listBrandValidateDTO)
-             select CreateSuccessNotification(i.InputIdentityUpdateBrand!.InputUpdateBrand.Code, i.InputIdentityUpdateBrand!.InputUpdateBrand.Description)).ToList();
+             select UpdateSuccessNotification(i.InputUpdate.Code, i.InputUpdate.Description)).ToList();
         }
 
         public void Delete(List<BrandValidateDTO> listBrandValidateDTO)
@@ -83,7 +86,7 @@ namespace Domain.Service.Registration.Brand
              select OriginalNotFound(i.InputIdentityDeleteBrand.Id)).ToList();
 
             (from i in RemoveInvalid(listBrandValidateDTO)
-             select CreateSuccessNotification(i.InputIdentityDeleteBrand!.Id.ToString())).ToList();
+             select DeleteSuccessNotification(i.InputIdentityDeleteBrand!.Id.ToString())).ToList();
         }
     }
 }

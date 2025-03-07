@@ -6,30 +6,30 @@ namespace Domain.DTO.Entity.Customer
 {
     public class CustomerValidateDTO : BaseValidateDTO
     {
-        public InputCreateCustomer InputCreateCustomer { get; private set; }
+        public InputCreateCustomer InputCreate { get; private set; }
         public string ExistingCode { get; set; }
         public InputCreateCustomer? RepeatedCode { get; set; }
         public EnumValidateType InvalidBirthDate { get; set; }
 
-        public InputUpdateCustomer InputUpdateCustomer { get; private set; }
+        public InputUpdateCustomer InputUpdate { get; private set; }
         public InputIdentityUpdateCustomer? RepeatedCodeUpdate { get; set; }
 
         public InputIdentityUpdateCustomer InputIdentityUpdateCustomer { get; private set; }
         public InputIdentityDeleteCustomer InputIdentityDeleteCustomer { get; private set; }
         public CustomerDTO OriginalCustomer { get; set; }
 
-        public CustomerValidateDTO ValidateCreate(InputCreateCustomer inputCreateCustomer, string existingCode, InputCreateCustomer? repeatedCode, EnumValidateType birthDate)
+        public CustomerValidateDTO ValidateCreate(InputCreateCustomer inputCreate, string existingCode, InputCreateCustomer? repeatedCode, EnumValidateType birthDate)
         {
-            InputCreateCustomer = inputCreateCustomer;
+            InputCreate = inputCreate;
             ExistingCode = existingCode;
             RepeatedCode = repeatedCode;
             InvalidBirthDate = birthDate;
             return this;
         }
 
-        public CustomerValidateDTO ValidateUpdate(InputIdentityUpdateCustomer inputIdentityUpdateCustomer, string existingCode, InputIdentityUpdateCustomer repeatedCodeUpdate, EnumValidateType birthDate)
+        public CustomerValidateDTO ValidateUpdate(InputUpdateCustomer inputUpdate, string existingCode, InputIdentityUpdateCustomer repeatedCodeUpdate, EnumValidateType birthDate)
         {
-            InputIdentityUpdateCustomer = inputIdentityUpdateCustomer;
+            InputUpdate = inputUpdate;
             ExistingCode = existingCode;
             RepeatedCodeUpdate = repeatedCodeUpdate;
             InvalidBirthDate = birthDate;

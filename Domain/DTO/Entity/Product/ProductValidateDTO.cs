@@ -11,7 +11,7 @@ namespace Domain.DTO.Entity.Product
         public BrandDTO OriginalBrand { get; set; }
         public CategoryDTO OriginalCategory { get; set; }
 
-        public InputUpdateProduct InputUpdateProduct { get; set; }
+        public InputUpdateProduct InputUpdate { get; set; }
         public ProductDTO OriginalProduct { get; set; }
 
         public InputIdentityUpdateProduct InputIdentityUpdateProduct { get; set; }
@@ -25,9 +25,9 @@ namespace Domain.DTO.Entity.Product
             return this;
         }
 
-        public ProductValidateDTO ValidateUpdate(InputIdentityUpdateProduct inputIdentityUpdateProduct, ProductDTO originalProduct, BrandDTO originalBrand, CategoryDTO originalCategory)
+        public ProductValidateDTO ValidateUpdate(InputUpdateProduct inputUpdate, ProductDTO originalProduct, BrandDTO originalBrand, CategoryDTO originalCategory)
         {
-            InputIdentityUpdateProduct = inputIdentityUpdateProduct;
+            InputUpdate = inputUpdate;
             OriginalProduct = originalProduct;
             OriginalBrand = originalBrand;
             OriginalCategory = originalCategory;

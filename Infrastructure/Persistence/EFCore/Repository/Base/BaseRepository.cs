@@ -1,4 +1,5 @@
 ﻿using Arguments.Argument.Base.Crud;
+using Arguments.Argument.Interface;
 using Arguments.Conversor;
 using Domain.DTO.Base;
 using Domain.Interface.Base;
@@ -10,7 +11,7 @@ namespace Infrastructure.Persistence.EFCore.Repository.Base
 {
     public abstract class BaseRepository<TEntity, TDTO, TInputIdentityView> : IBaseRepository<TDTO, TInputIdentityView>
         where TEntity : BaseEntity, new()
-        where TInputIdentityView : BaseInputIdentityView<TInputIdentityView>
+        where TInputIdentityView : BaseInputIdentityView<TInputIdentityView>, IBaseIdentityView
         where TDTO : BaseDTO, new()
     {
         #region Dependency Injection
@@ -33,11 +34,11 @@ namespace Infrastructure.Persistence.EFCore.Repository.Base
             var listEntity = await _dbSet.ToListAsync();
             return listEntity.GenericConvertList<TDTO, TEntity>();
         }
+
         public async Task<List<TDTO>> GetListByListId(List<long> listId)
         {
-            var getList = (from i in listId
-                           select _dbSet.Find(i)).ToList();
-            return getList.GenericConvertList<TDTO, TEntity>();
+            var getListByListId = await _dbSet.Where(i => listId.Contains(i.Id)).AsNoTracking().ToListAsync();
+            return Conversor.GenericConvertList<TDTO, TEntity>(getListByListId);
         }
 
         public async Task<TDTO?> GetById(TInputIdentityView? id)
@@ -65,6 +66,7 @@ namespace Infrastructure.Persistence.EFCore.Repository.Base
         public async Task<List<TDTO>> Update(List<TDTO> listDto)
         {
             List<TEntity> listEntity = Conversor.GenericConvertList<TEntity, TDTO>(listDto);
+
             _dbSet.UpdateRange(listEntity);
             await _context.SaveChangesAsync();
             return listEntity.GenericConvertList<TDTO, TEntity>();

@@ -1,9 +1,12 @@
-﻿using Arguments.Argument.Registration.CustomerAddress;
+﻿using Arguments.Argument.Base.ApiResponse;
+using Arguments.Argument.Enum;
+using Arguments.Argument.Registration.CustomerAddress;
 using Arguments.Conversor;
 using Domain.DTO.Entity.CustomerAddress;
 using Domain.Interface.Repository;
 using Domain.Interface.Service.CustomerAddress;
 using Domain.Service.Base;
+using Domain.Utils.Helper;
 using System.Reflection;
 
 namespace Domain.Service.Registration.CustomerAddress
@@ -27,27 +30,27 @@ namespace Domain.Service.Registration.CustomerAddress
             var newListCustomerAddressToValidate = (from i in listInputCreateCustomerAddress
                                                     select new
                                                     {
-                                                        InputCreateCustomerAddress = i,
+                                                        InputCreate = i,
                                                         RelatedCustomerDTO = listRelatedCustomerDTO.FirstOrDefault(j => j.Id == i.CustomerId)
                                                     }).ToList();
 
-            var newListCustomerAddressValidateDTO = newListCustomerAddressToValidate.Select(i => new CustomerAddressValidateDTO().ValidateCreate(i.InputCreateCustomerAddress, i.RelatedCustomerDTO)).ToList();
+            var newListCustomerAddressValidateDTO = newListCustomerAddressToValidate.Select(i => new CustomerAddressValidateDTO().ValidateCreate(i.InputCreate, i.RelatedCustomerDTO)).ToList();
             _validate.Create(newListCustomerAddressValidateDTO);
 
-            var (success, error) = GetValidationResult();
+            var listNotification = NotificationBuilder.GetAll();
 
-            if (success.Count == 0 && error.Count > 0)
-                return BaseResult<List<OutputCustomerAddress>>.Failure(error);
+            if (listNotification.Where(i => i.Type == EnumNotificationType.Error).ToList().Count > 0 && listNotification.Where(i => i.Type == EnumNotificationType.Success).ToList().Count == 0)
+                return BaseResult<List<OutputCustomerAddress>>.Failure(listNotification);
 
             var validlistCustomerAddress = (from i in RemoveInvalid(newListCustomerAddressValidateDTO) where !i.Invalid select i).ToList();
 
             var newListCustomerAddressToCreate = (from i in validlistCustomerAddress
-                                                  let create = i.InputCreateCustomerAddress
+                                                  let create = i.InputCreate
                                                   select new CustomerAddressDTO(create.CustomerId, create.Number, create.Complement, create.Reference, create.Neighborhood, create.PostalCode, create.Street)).ToList();
 
             await _repository.Create(newListCustomerAddressToCreate);
 
-            return BaseResult<List<OutputCustomerAddress>>.Success(Conversor.GenericConvertList<OutputCustomerAddress, CustomerAddressValidateDTO>(validlistCustomerAddress), [.. success, .. error]);
+            return BaseResult<List<OutputCustomerAddress>>.Success(Conversor.GenericConvertList<OutputCustomerAddress, CustomerAddressValidateDTO>(validlistCustomerAddress), listNotification);
         }
 
         public override async Task<BaseResult<List<OutputCustomerAddress>>> UpdateMultiple(List<InputIdentityUpdateCustomerAddress> listInputIdentityUpdateCustomerAddress)
@@ -64,21 +67,20 @@ namespace Domain.Service.Registration.CustomerAddress
             var newListCustomerAddressValidateDTO = newListCustomerAddressToValidate.Select(i => new CustomerAddressValidateDTO().ValidateUpdate(i.InputUpdate, i.OriginalCustomerAddress)).ToList();
             _validate.Update(newListCustomerAddressValidateDTO);
 
-            var (success, error) = GetValidationResult();
+            var listNotification = NotificationBuilder.GetAll();
 
-            if (success.Count == 0 && error.Count > 0)
-                return BaseResult<List<OutputCustomerAddress>>.Failure(error);
+            if (listNotification.Where(i => i.Type == EnumNotificationType.Error).ToList().Count > 0 && listNotification.Where(i => i.Type == EnumNotificationType.Success).ToList().Count == 0)
+                return BaseResult<List<OutputCustomerAddress>>.Failure(listNotification);
 
             var validListCustomerAddress = (from i in RemoveInvalid(newListCustomerAddressValidateDTO) where !i.Invalid select i).ToList();
 
-            var newListCustomerAddressToUpdate = (from i in validListCustomerAddress.GetType().GetProperties()
-                                                  from j in listOriginalCustomerAddress
-                                                  let properties = j.GetType().GetProperty(i.Name)
-                                                  where properties != null
-                                                  select setValue(properties, j, i.GetValue(i.Name))).ToList();
+            (from i in validListCustomerAddress
+             select UpdateDTO<CustomerAddressDTO, InputUpdateCustomerAddress>(i.OriginalCustomerAddress, i.InputUpdate)).ToList();
 
-            await _repository.Update(newListCustomerAddressToUpdate);
-            return BaseResult<List<OutputCustomerAddress>>.Success(Conversor.GenericConvertList<OutputCustomerAddress, CustomerAddressDTO>(newListCustomerAddressToUpdate), [.. success, .. error]);
+            var originalCustomerAddressListToUpdate = validListCustomerAddress.Select(i => i.OriginalCustomerAddress).ToList();
+
+            await _repository.Update(originalCustomerAddressListToUpdate);
+            return BaseResult<List<OutputCustomerAddress>>.Success(Conversor.GenericConvertList<OutputCustomerAddress, CustomerAddressDTO>(originalCustomerAddressListToUpdate), listNotification);
         }
 
         public override async Task<BaseResult<bool>> DeleteMultiple(List<InputIdentityDeleteCustomerAddress> listInputIdentityDeleteCustomerAddress)
@@ -95,15 +97,15 @@ namespace Domain.Service.Registration.CustomerAddress
             var newListCustomerAddressValidateDTO = newListCustomerAddressToValidate.Select(i => new CustomerAddressValidateDTO().ValidateDelete(i.InputDelete, i.OriginalCustomerAddress)).ToList();
             _validate.Delete(newListCustomerAddressValidateDTO);
 
-            var (success, error) = GetValidationResult();
+            var listNotification = NotificationBuilder.GetAll();
 
-            if (success.Count == 0 && error.Count > 0)
-                return BaseResult<bool>.Failure(error);
+            if (listNotification.Where(i => i.Type == EnumNotificationType.Error).ToList().Count > 0 && listNotification.Where(i => i.Type == EnumNotificationType.Success).ToList().Count == 0)
+                return BaseResult<bool>.Failure(listNotification);
 
             var validListCustomerAddress = (from i in RemoveInvalid(newListCustomerAddressValidateDTO) where !i.Invalid select i).ToList();
             await _repository.Delete(Conversor.GenericConvertList<CustomerAddressDTO, CustomerAddressValidateDTO>(validListCustomerAddress));
 
-            return BaseResult<bool>.Success(true, [.. success, .. error]);
+            return BaseResult<bool>.Success(true, listNotification);
         }
 
         public Task<List<CustomerAddressDTO>> GetListByListId(List<InputIdentityViewCustomerAddress> listInputIdentityView)

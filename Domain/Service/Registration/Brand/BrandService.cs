@@ -7,9 +7,6 @@ using Domain.Interface.Repository;
 using Domain.Interface.Service.Brand;
 using Domain.Service.Base;
 using Domain.Utils.Helper;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 
 namespace Domain.Service.Registration.Brand
 {
@@ -60,9 +57,7 @@ namespace Domain.Service.Registration.Brand
 
         public override async Task<BaseResult<List<OutputBrand>>> UpdateMultiple(List<InputIdentityUpdateBrand> listInputIdentityUpdateBrand)
         {
-            var listOriginalBrandDTOById = await _repository.GetListByListId(listInputIdentityUpdateBrand.Select(i => i.Id).ToList());
-
-            var listOriginalBrandDTOByCode = await _repository.GetListByListCode(listInputIdentityUpdateBrand.Select(i => i.InputUpdateBrand.Code).ToList());
+            var listOriginalBrandDTO = await _repository.GetListByListId(listInputIdentityUpdateBrand.Select(i => i.Id).ToList());
 
             var repeatedCode = (from i in listInputIdentityUpdateBrand
                                 where listInputIdentityUpdateBrand.Count(j => j.InputUpdateBrand.Code == i.InputUpdateBrand.Code) > 1
@@ -71,13 +66,13 @@ namespace Domain.Service.Registration.Brand
             var newListBrandToValidate = (from i in listInputIdentityUpdateBrand
                                           select new
                                           {
-                                              InputIdentityUpdateBrand = i,
-                                              OriginalBrand = listOriginalBrandDTOById.FirstOrDefault(j => i.Id == j.Id),
-                                              ExistingCode = listOriginalBrandDTOByCode?.FirstOrDefault(j => i.Id != j.Id)?.Code ?? null,
+                                              InputUpdate = i.InputUpdateBrand,
+                                              OriginalBrand = listOriginalBrandDTO.FirstOrDefault(j => i.Id == j.Id),
+                                              ExistingCode = listOriginalBrandDTO?.FirstOrDefault(j => i.InputUpdateBrand.Code != j.Code)?.Code ?? null,
                                               RepeatedCode = repeatedCode.FirstOrDefault()
                                           }).ToList();
 
-            List<BrandValidateDTO> listBrandValidateDTO = newListBrandToValidate.Select(i => new BrandValidateDTO().ValidateUpdate(i.InputIdentityUpdateBrand, i.OriginalBrand, i.ExistingCode, i.RepeatedCode)).ToList();
+            List<BrandValidateDTO> listBrandValidateDTO = newListBrandToValidate.Select(i => new BrandValidateDTO().ValidateUpdate(i.InputUpdate, i.OriginalBrand, i.ExistingCode, i.RepeatedCode)).ToList();
 
             _validate.Update(listBrandValidateDTO);
 
@@ -87,15 +82,11 @@ namespace Domain.Service.Registration.Brand
                 return BaseResult<List<OutputBrand>>.Failure(listNotification);
 
             var validlistBrand = (from i in RemoveInvalid(listBrandValidateDTO) where !i.Invalid select i).ToList();
-            var selectedValidListBrand = (from i in validlistBrand
-                                          select new BrandDTO(i.InputIdentityUpdateBrand.InputUpdateBrand.Code, i.InputIdentityUpdateBrand.InputUpdateBrand.Description)).ToList();
 
-            var originalBrandToUpdate = (from i in selectedValidListBrand.GetType().GetProperties()
-                                         from j in listOriginalBrandDTOById
-                                         let properties = j.GetType().GetProperty(i.Name)
-                                         where properties != null
-                                         let value = setValue(properties, j, i.GetValue(i.Name))
-                                         select j).ToList();
+            (from i in validlistBrand
+             select UpdateDTO<BrandDTO, InputUpdateBrand>(i.OriginalBrand, i.InputUpdate)).ToList();
+
+            var originalBrandToUpdate = validlistBrand.Select(i => i.OriginalBrand).ToList();
 
             await _repository.Update(originalBrandToUpdate);
 
@@ -128,17 +119,6 @@ namespace Domain.Service.Registration.Brand
             await _repository.Delete(listBrandDTOToDelete);
 
             return BaseResult<bool>.Success(true, listNotification);
-        }
-
-        public Task<List<BrandDTO>> GetListByListId(List<InputIdentityViewBrand> listInputIdentityView)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static TOutput setValue<TOutput>(PropertyInfo property, TOutput output, object? value)
-        {
-            property.SetValue(output, value);
-            return output;
         }
     }
 }

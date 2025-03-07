@@ -8,7 +8,7 @@ namespace Domain.DTO.Entity.Category
         public InputCreateCategory InputCreateCategory { get; private set; }
         public string? RepeatedCode { get; set; }
 
-        public InputUpdateCategory InputUpdateCategory { get; private set; }
+        public InputUpdateCategory InputUpdate { get; private set; }
         public CategoryDTO? OriginalCategory { get; set; }
 
         public InputIdentityUpdateCategory InputIdentityUpdateCategory { get; private set; }
@@ -25,9 +25,9 @@ namespace Domain.DTO.Entity.Category
             return this;
         }
 
-        public CategoryValidateDTO ValidateUpdate(InputIdentityUpdateCategory inputIdentityUpdateCategory, CategoryDTO originalCategory)
+        public CategoryValidateDTO ValidateUpdate(InputUpdateCategory inputUpdate, CategoryDTO originalCategory)
         {
-            InputIdentityUpdateCategory = inputIdentityUpdateCategory;
+            InputUpdate = inputUpdate;
             OriginalCategory = originalCategory;
             return this;
         }

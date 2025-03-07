@@ -1,7 +1,6 @@
 ﻿using Arguments.Argument.Enum;
 using Domain.DTO.Base;
 using Domain.Interface.Service.Base;
-using System.Reflection;
 
 namespace Domain.Service.Base
 {
@@ -41,7 +40,7 @@ namespace Domain.Service.Base
              let setValidate = validate == EnumValidateType.Invalid ? i.SetInvalid() : i.SetInvalid()
              let propertyKey = inputvalue.GetType().GetProperty(key)
              let keyValue = propertyKey.GetValue(inputvalue)!.ToString()
-             select validate == EnumValidateType.Invalid ? InvalidLength(key, valueString, minLeght, maxLenght) : NonInformedField(keyValue, valueString)).ToList();
+             select validate == EnumValidateType.Invalid ? InvalidLength(keyValue, valueString, minLeght, maxLenght) : NonInformedField(keyValue, valueString)).ToList();
         }
 
         //public void ValidateNonInformedLongField(List<TValidateDTO> listValidateDTO, string key, long valueLong)

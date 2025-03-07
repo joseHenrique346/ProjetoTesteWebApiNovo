@@ -6,23 +6,25 @@ namespace Domain.DTO.Entity.CustomerAddress
 {
     public class CustomerAddressValidateDTO : BaseValidateDTO
     {
-        public InputCreateCustomerAddress InputCreateCustomerAddress { get; set; }
+        public InputCreateCustomerAddress InputCreate { get; set; }
         public CustomerDTO? RelatedCustomerDTO { get; set; }
-        public InputUpdateCustomerAddress InputUpdateCustomerAddress { get; set; }
+
+        public InputUpdateCustomerAddress InputUpdate { get; set; }
         public CustomerAddressDTO? OriginalCustomerAddress { get; set; }
+
         public InputIdentityUpdateCustomerAddress InputIdentityUpdateCustomerAddress { get; set; }
         public InputIdentityDeleteCustomerAddress InputIdentityDeleteCustomerAddress { get; set; }
 
-        public CustomerAddressValidateDTO ValidateCreate(InputCreateCustomerAddress inputCreateCustomerAddress, CustomerDTO? relatedCustomerDTO)
+        public CustomerAddressValidateDTO ValidateCreate(InputCreateCustomerAddress inputCreate, CustomerDTO? relatedCustomerDTO)
         {
-            InputCreateCustomerAddress = inputCreateCustomerAddress;
+            InputCreate = inputCreate;
             RelatedCustomerDTO = relatedCustomerDTO;
             return this;
         }
 
-        public CustomerAddressValidateDTO ValidateUpdate(InputUpdateCustomerAddress inputUpdateCustomerAddress, CustomerAddressDTO? originalCustomerAddress)
+        public CustomerAddressValidateDTO ValidateUpdate(InputUpdateCustomerAddress inputUpdate, CustomerAddressDTO? originalCustomerAddress)
         {
-            InputUpdateCustomerAddress = inputUpdateCustomerAddress;
+            InputUpdate = inputUpdate;
             OriginalCustomerAddress = originalCustomerAddress;
             return this;
         }

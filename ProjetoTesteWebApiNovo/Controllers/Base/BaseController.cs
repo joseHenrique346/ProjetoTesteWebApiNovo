@@ -1,4 +1,5 @@
 ﻿using Arguments.Argument.Base.Crud;
+using Arguments.Conversor;
 using Domain.DTO.Base;
 using Domain.Interface.Service.Base;
 using Infrastructure.Persistence.EFCore.UnitOfWork.Interface;
@@ -14,7 +15,7 @@ namespace ProjetoTesteWebApiNovo.Controllers.Base
         where TInputCreate : BaseInputCreate<TInputCreate>
         where TInputIdentityUpdate : BaseInputIdentityUpdate<TInputIdentityUpdate>
         where TInputIdentityDelete : BaseInputIdentityDelete<TInputIdentityDelete>
-        where TOutput : BaseOutput<TOutput>
+        where TOutput : BaseOutput<TOutput>, new()
     {
         #region Dependency Injection
 
@@ -45,13 +46,19 @@ namespace ProjetoTesteWebApiNovo.Controllers.Base
         [HttpGet("Get")]
         public async Task<ActionResult<TOutput>> GetAll()
         {
-            return Ok(await _service.GetAll());
+            var getAll = await _service.GetAll();
+            if (getAll != null)
+                return Ok(Conversor.GenericConvertList<TOutput, TDTO>(getAll));
+            return BadRequest();
         }
 
-        [HttpGet("GetListByListId")]
+        [HttpPost("GetListByListId")]
         public async Task<ActionResult<TOutput>> GetListByListId(List<TInputIdentityView> listInputIdentityView)
         {
-            return Ok(await _service.GetListByListId(listInputIdentityView));
+            var getListByListId = await _service.GetListByListId(listInputIdentityView);
+            if (getListByListId != null)
+                return Ok(Conversor.GenericConvertList<TOutput, TDTO>(getListByListId));
+            return BadRequest();
         }
 
         #endregion

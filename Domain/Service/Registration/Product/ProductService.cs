@@ -1,9 +1,12 @@
-﻿using Arguments.Argument.Registration.Product;
+﻿using Arguments.Argument.Base.ApiResponse;
+using Arguments.Argument.Enum;
+using Arguments.Argument.Registration.Product;
 using Arguments.Conversor;
 using Domain.DTO.Entity.Product;
 using Domain.Interface.Repository;
 using Domain.Interface.Service.Product;
 using Domain.Service.Base;
+using Domain.Utils.Helper;
 using System.Reflection;
 
 namespace Domain.Service.Registration.Product
@@ -38,10 +41,10 @@ namespace Domain.Service.Registration.Product
             var newListProductValidateDTO = newListProductToValidate.Select(i => new ProductValidateDTO().ValidateCreate(i.InputCreate, i.OriginalBrand, i.OriginalCategory)).ToList();
             _validate.Update(newListProductValidateDTO);
 
-            var (success, error) = GetValidationResult();
+            var listNotification = NotificationBuilder.GetAll();
 
-            if (success.Count == 0 && error.Count > 0)
-                return BaseResult<List<OutputProduct>>.Failure(error);
+            if (listNotification.Where(i => i.Type == EnumNotificationType.Error).ToList().Count > 0 && listNotification.Where(i => i.Type == EnumNotificationType.Success).ToList().Count == 0)
+                return BaseResult<List<OutputProduct>>.Failure(listNotification);
 
             var validListProduct = (from i in RemoveInvalid(newListProductValidateDTO) where !i.Invalid select i).ToList();
             var newListProductToCreate = (from i in validListProduct
@@ -49,7 +52,7 @@ namespace Domain.Service.Registration.Product
                                           select new ProductDTO(create.Code, create.Description, create.BrandId, create.CategoryId, create.Price, create.Stock)).ToList();
 
             await _productRepository.Create(newListProductToCreate);
-            return BaseResult<List<OutputProduct>>.Success(Conversor.GenericConvertList<OutputProduct, ProductDTO>(newListProductToCreate), [.. success, .. error]);
+            return BaseResult<List<OutputProduct>>.Success(Conversor.GenericConvertList<OutputProduct, ProductDTO>(newListProductToCreate), listNotification);
         }
 
         public override async Task<BaseResult<List<OutputProduct>>> UpdateMultiple(List<InputIdentityUpdateProduct> listInputIdentityUpdateProduct)
@@ -61,7 +64,7 @@ namespace Domain.Service.Registration.Product
             var newListProductToValidate = (from i in listInputIdentityUpdateProduct
                                             select new
                                             {
-                                                InputUpdate = i,
+                                                InputUpdate = i.InputUpdateProduct,
                                                 OriginalProduct = listOriginalProduct.FirstOrDefault(j => i.Id == j.Id),
                                                 OriginalBrand = listOriginalBrand.FirstOrDefault(j => i.InputUpdateProduct.BrandId == j.Id),
                                                 OriginalCategory = listOriginalCategory.FirstOrDefault(j => i.InputUpdateProduct.CategoryId == j.Id)
@@ -70,20 +73,20 @@ namespace Domain.Service.Registration.Product
             var newListProductValidateDTO = newListProductToValidate.Select(i => new ProductValidateDTO().ValidateUpdate(i.InputUpdate, i.OriginalProduct, i.OriginalBrand, i.OriginalCategory)).ToList();
             _validate.Update(newListProductValidateDTO);
 
-            var (success, error) = GetValidationResult();
+            var listNotification = NotificationBuilder.GetAll();
 
-            if (success.Count == 0 && error.Count > 0)
-                return BaseResult<List<OutputProduct>>.Failure(error);
+            if (listNotification.Where(i => i.Type == EnumNotificationType.Error).ToList().Count > 0 && listNotification.Where(i => i.Type == EnumNotificationType.Success).ToList().Count == 0)
+                return BaseResult<List<OutputProduct>>.Failure(listNotification);
 
             var validListProduct = (from i in RemoveInvalid(newListProductValidateDTO) where !i.Invalid select i).ToList();
-            var newListProductToUpdate = (from i in validListProduct.GetType().GetProperties()
-                                          from j in listOriginalProduct
-                                          let properties = j.GetType().GetProperty(i.Name)
-                                          where properties != null
-                                          select setValue(properties, j, i.GetValue(i.Name))).ToList();
+            
+            (from i in validListProduct
+             select UpdateDTO<ProductDTO, InputUpdateProduct>(i.OriginalProduct, i.InputUpdate)).ToList();
 
-            await _productRepository.Update(newListProductToUpdate);
-            return BaseResult<List<OutputProduct>>.Success(Conversor.GenericConvertList<OutputProduct, ProductDTO>(newListProductToUpdate), [.. success, .. error]);
+            var originalProductListToUpdate = validListProduct.Select(i => i.OriginalProduct).ToList();
+
+            await _productRepository.Update(originalProductListToUpdate);
+            return BaseResult<List<OutputProduct>>.Success(Conversor.GenericConvertList<OutputProduct, ProductDTO>(originalProductListToUpdate), listNotification);
         }
 
         public override async Task<BaseResult<bool>> DeleteMultiple(List<InputIdentityDeleteProduct> listInputIdentityDeleteProduct)
@@ -99,15 +102,15 @@ namespace Domain.Service.Registration.Product
             var newListProductValidateDTO = newListProductsToValidate.Select(i => new ProductValidateDTO().ValidateDelete(i.InputDelete, i.OriginalProduct)).ToList();
             _validate.Delete(newListProductValidateDTO);
 
-            var (success, error) = GetValidationResult();
+            var listNotification = NotificationBuilder.GetAll();
 
-            if (success.Count == 0 && error.Count > 0)
-                return BaseResult<bool>.Failure(error);
+            if (listNotification.Where(i => i.Type == EnumNotificationType.Error).ToList().Count > 0 && listNotification.Where(i => i.Type == EnumNotificationType.Success).ToList().Count == 0)
+                return BaseResult<bool>.Failure(listNotification);
 
             var validListProduct = (from i in RemoveInvalid(newListProductValidateDTO) where !i.Invalid select i).ToList();
             await _productRepository.Delete(Conversor.GenericConvertList<ProductDTO, ProductValidateDTO>(validListProduct));
 
-            return BaseResult<bool>.Success(true, [.. success, .. error]);
+            return BaseResult<bool>.Success(true, listNotification);
         }
 
         public Task<List<ProductDTO>> GetListByListId(List<InputIdentityViewProduct> listInputIdentityView)

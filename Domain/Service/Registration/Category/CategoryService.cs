@@ -1,9 +1,12 @@
-﻿using Arguments.Argument.Registration.Category;
+﻿using Arguments.Argument.Base.ApiResponse;
+using Arguments.Argument.Enum;
+using Arguments.Argument.Registration.Category;
 using Arguments.Conversor;
 using Domain.DTO.Entity.Category;
 using Domain.Interface.Repository;
 using Domain.Interface.Service.Category;
 using Domain.Service.Base;
+using Domain.Utils.Helper;
 
 namespace Domain.Service.Registration.Category
 {
@@ -31,17 +34,17 @@ namespace Domain.Service.Registration.Category
             List<CategoryValidateDTO> listCategoryValidateDTO = listNewCategory.Select(i => new CategoryValidateDTO().ValidateCreate(i.InputCreateCategory, i.RepeatedCode)).ToList();
             _validate.Create(listCategoryValidateDTO);
 
-            var (success, error) = GetValidationResult();
+            var listNotification = NotificationBuilder.GetAll();
 
-            if (success.Count == 0 && error.Count > 0)
-                return BaseResult<List<OutputCategory>>.Failure(error);
+            if (listNotification.Where(i => i.Type == EnumNotificationType.Error).ToList().Count > 0 && listNotification.Where(i => i.Type == EnumNotificationType.Success).ToList().Count == 0)
+                return BaseResult<List<OutputCategory>>.Failure(listNotification);
 
             var validlistCategory = (from i in RemoveInvalid(listCategoryValidateDTO) where !i.Invalid select i).ToList();
             var newListCategory = (from i in validlistCategory select new CategoryDTO(i.InputCreateCategory.Code, i.InputCreateCategory.Description)).ToList();
 
             await _repository.Create(newListCategory);
 
-            return BaseResult<List<OutputCategory>>.Success(Conversor.GenericConvertList<OutputCategory, CategoryDTO>(newListCategory), success);
+            return BaseResult<List<OutputCategory>>.Success(Conversor.GenericConvertList<OutputCategory, CategoryDTO>(newListCategory), listNotification);
         }
 
         public override async Task<BaseResult<List<OutputCategory>>> UpdateMultiple(List<InputIdentityUpdateCategory> listInputIdentityUpdateCategory)
@@ -51,33 +54,30 @@ namespace Domain.Service.Registration.Category
             var listCategoryToUpdate = (from i in listInputIdentityUpdateCategory
                                         select new
                                         {
-                                            InputIdentityUpdateCategory = i,
+                                            InputUpdate = i.InputUpdateCategory,
                                             OriginalCategory = listOriginalCategoryDTO.FirstOrDefault(j => i.Id == j.Id)
                                         }).ToList();
 
-            List<CategoryValidateDTO> listCategoryValidateDTO = listCategoryToUpdate.Select(i => new CategoryValidateDTO().ValidateUpdate(i.InputIdentityUpdateCategory, i.OriginalCategory)).ToList();
+            List<CategoryValidateDTO> listCategoryValidateDTO = listCategoryToUpdate.Select(i => new CategoryValidateDTO().ValidateUpdate(i.InputUpdate, i.OriginalCategory)).ToList();
 
             _validate.Update(listCategoryValidateDTO);
 
-            var (success, error) = GetValidationResult();
+            var listNotification = NotificationBuilder.GetAll();
 
-            if (success.Count == 0 && error.Count > 0)
-                return BaseResult<List<OutputCategory>>.Failure(error);
+            if (listNotification.Where(i => i.Type == EnumNotificationType.Error).ToList().Count > 0 && listNotification.Where(i => i.Type == EnumNotificationType.Success).ToList().Count == 0)
+                return BaseResult<List<OutputCategory>>.Failure(listNotification);
 
             var validlistCategory = (from i in RemoveInvalid(listCategoryValidateDTO) where !i.Invalid select i).ToList();
 
-            var originalCategoryUpdated = (from i in validlistCategory
-                                           from j in listOriginalCategoryDTO
-                                           where j.Id == i.InputIdentityUpdateCategory.Id
-                                           let inputUpdate = i.InputIdentityUpdateCategory.InputUpdateCategory
-                                           let description = j.Description = inputUpdate.Description
-                                           let code = j.Code = inputUpdate.Code
-                                           select j).ToList();
+            (from i in validlistCategory
+             select UpdateDTO<CategoryDTO, InputUpdateCategory>(i.OriginalCategory, i.InputUpdate)).ToList();
 
-            await _repository.Update(originalCategoryUpdated);
+            var originalCategoryListToUpdate = validlistCategory.Select(i => i.OriginalCategory).ToList();
 
-            var outputOriginalCategoryUpdated = Conversor.GenericConvertList<OutputCategory, CategoryDTO>(originalCategoryUpdated);
-            return BaseResult<List<OutputCategory>>.Success(outputOriginalCategoryUpdated, success);
+            await _repository.Update(originalCategoryListToUpdate!);
+
+            var outputOriginalCategoryUpdated = Conversor.GenericConvertList<OutputCategory, CategoryDTO>(originalCategoryListToUpdate!);
+            return BaseResult<List<OutputCategory>>.Success(outputOriginalCategoryUpdated, listNotification);
         }
 
         public override async Task<BaseResult<bool>> DeleteMultiple(List<InputIdentityDeleteCategory> listInputIdentityDeleteCategory)
@@ -95,17 +95,17 @@ namespace Domain.Service.Registration.Category
             var listCategoryValidateDTO = listCategoryToDelete.Select(i => new CategoryValidateDTO().ValidateDelete(i.InputIdentityDeleteCategory, i.OriginalCategoryId)).ToList();
             _validate.Delete(listCategoryValidateDTO);
 
-            var (success, error) = GetValidationResult();
+            var listNotification = NotificationBuilder.GetAll();
 
-            if (success.Count == 0 && error.Count > 0)
-                return BaseResult<bool>.Failure(error);
+            if (listNotification.Where(i => i.Type == EnumNotificationType.Error).ToList().Count > 0 && listNotification.Where(i => i.Type == EnumNotificationType.Success).ToList().Count == 0)
+                return BaseResult<bool>.Failure(listNotification);
 
             var validlistDeleteCategory = (from i in RemoveInvalid(listCategoryValidateDTO) where !i.Invalid select i).ToList();
             var listCategoryDTO = Conversor.GenericConvertList<CategoryDTO, CategoryValidateDTO>(validlistDeleteCategory);
 
             await _repository.Delete(listCategoryDTO);
 
-            return BaseResult<bool>.Success(true, success);
+            return BaseResult<bool>.Success(true, listNotification);
         }
 
         public Task<List<CategoryDTO>> GetListByListId(List<InputIdentityViewCategory> listInputIdentityView)
