@@ -19,10 +19,10 @@ namespace Domain.Service.Registration.CustomerAddress
             // let setIgnore = i.SetIgnore()
             // select resultInvalidRelatedProperty).ToList();
 
-            InvalidLengthValidation(listCustomerAddressValidateDTO, "Code", "PostalCode", "InputCreate", 1, 8);
-            InvalidLengthValidation(listCustomerAddressValidateDTO, "Code", "Reference", "InputCreate", 0, 100);
-            InvalidLengthValidation(listCustomerAddressValidateDTO, "Code", "Complement", "InputCreate", 0, 100);
-            InvalidLengthValidation(listCustomerAddressValidateDTO, "Code", "Neighborhood", "InputCreate", 1, 100);
+            InvalidLengthValidation(listCustomerAddressValidateDTO, "PostalCode", "InputCreate", 1, 8);
+            InvalidLengthValidation(listCustomerAddressValidateDTO, "Reference", "InputCreate", 0, 100);
+            InvalidLengthValidation(listCustomerAddressValidateDTO, "Complement", "InputCreate", 0, 100);
+            InvalidLengthValidation(listCustomerAddressValidateDTO, "Neighborhood", "InputCreate", 1, 100);
 
             //(from i in RemoveIgnore(listCustomerAddressValidateDTO)
             // let resultInvalidLength = InvalidLenght(i.InputCreateCustomerAddress.PostalCode, 1, 8)
@@ -57,10 +57,10 @@ namespace Domain.Service.Registration.CustomerAddress
 
             //existing
 
-            InvalidLengthValidation(listCustomerAddressValidateDTO, "Code", "PostalCode", "InputUpdate", 1, 8);
-            InvalidLengthValidation(listCustomerAddressValidateDTO, "Code", "Reference", "InputUpdate", 0, 100);
-            InvalidLengthValidation(listCustomerAddressValidateDTO, "Code", "Complement", "InputUpdate", 0, 100);
-            InvalidLengthValidation(listCustomerAddressValidateDTO, "Code", "Neighborhood", "InputUpdate", 1, 100);
+            InvalidLengthValidation(listCustomerAddressValidateDTO, "PostalCode", "InputUpdate", 1, 8);
+            InvalidLengthValidation(listCustomerAddressValidateDTO, "Reference", "InputUpdate", 0, 100);
+            InvalidLengthValidation(listCustomerAddressValidateDTO, "Complement", "InputUpdate", 0, 100);
+            InvalidLengthValidation(listCustomerAddressValidateDTO, "Neighborhood", "InputUpdate", 1, 100);
 
             //(from i in RemoveIgnore(listCustomerAddressValidateDTO)
             // let inputUpdate = i.InputIdentityUpdateCustomerAddress.InputUpdateCustomerAddress

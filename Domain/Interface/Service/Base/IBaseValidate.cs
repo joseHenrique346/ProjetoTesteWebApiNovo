@@ -17,7 +17,7 @@ namespace Domain.Interface.Service.Base
 
         bool AlreadyExists(string key);
 
-        bool RepeatedCode(string key);
+        bool RepeatedCode(string key, long index);
 
         bool CreateSuccessNotification(string key, string description);
 

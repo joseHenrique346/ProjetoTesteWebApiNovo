@@ -67,12 +67,12 @@ namespace Domain.Service.Registration.Brand
                                           select new
                                           {
                                               InputUpdate = i.InputUpdateBrand,
-                                              OriginalBrand = listOriginalBrandDTO.FirstOrDefault(j => i.Id == j.Id),
+                                              OriginalEntity = listOriginalBrandDTO.FirstOrDefault(j => i.Id == j.Id),
                                               ExistingCode = listOriginalBrandDTO?.FirstOrDefault(j => i.InputUpdateBrand.Code != j.Code)?.Code ?? null,
                                               RepeatedCode = repeatedCode.FirstOrDefault()
                                           }).ToList();
 
-            List<BrandValidateDTO> listBrandValidateDTO = newListBrandToValidate.Select(i => new BrandValidateDTO().ValidateUpdate(i.InputUpdate, i.OriginalBrand, i.ExistingCode, i.RepeatedCode)).ToList();
+            List<BrandValidateDTO> listBrandValidateDTO = newListBrandToValidate.Select(i => new BrandValidateDTO().ValidateUpdate(i.InputUpdate, i.OriginalEntity, i.ExistingCode, i.RepeatedCode)).ToList();
 
             _validate.Update(listBrandValidateDTO);
 
