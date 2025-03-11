@@ -23,7 +23,7 @@ namespace Domain.Service.Registration.Customer
              where i.RepeatedCode != null
              let setInvalid = i.SetInvalid()
              let index = listValidateDTO.IndexOf(i)
-             select RepeatedCode(i.InputCreate!.Code, index)).ToList();
+             select RepeatedCode(i.InputCreate!.Code)).ToList();
 
             (from i in RemoveIgnore(listValidateDTO)
              where i.InvalidBirthDate != EnumValidateType.Valid
@@ -31,11 +31,11 @@ namespace Domain.Service.Registration.Customer
              let setInvalid = i.SetInvalid()
              select InvalidBirthDate(i.InputCreate!.Code, birthDate, i.InputCreate!.FirstName)).ToList();
 
-            InvalidLengthValidation(listValidateDTO, "Code", "InputCreate", 1, 6);
-            InvalidLengthValidation(listValidateDTO, "FirstName", "InputCreate", 1, 100);
-            InvalidLengthValidation(listValidateDTO, "LastName", "InputCreate", 1, 100);
-            InvalidLengthValidation(listValidateDTO, "Document", "InputCreate", 11, 11);
-            InvalidLengthValidation(listValidateDTO, "Phone", "InputCreate", 11, 11);
+            //InvalidLengthValidation(listValidateDTO, "Code", "InputCreate", 1, 6);
+            //InvalidLengthValidation(listValidateDTO, "FirstName", "InputCreate", 1, 100);
+            //InvalidLengthValidation(listValidateDTO, "LastName", "InputCreate", 1, 100);
+            //InvalidLengthValidation(listValidateDTO, "Document", "InputCreate", 11, 11);
+            //InvalidLengthValidation(listValidateDTO, "Phone", "InputCreate", 11, 11);
 
             //(from i in RemoveIgnore(listCustomerValidateDTO)
             // let code = i.InputCreate.Code
@@ -88,7 +88,7 @@ namespace Domain.Service.Registration.Customer
              where i.RepeatedCode != null
              let setInvalid = i.SetInvalid()
              let index = listValidateDTO.IndexOf(i)
-             select RepeatedCode(i.InputCreate!.Code, index)).ToList();
+             select RepeatedCode(i.InputCreate!.Code)).ToList();
 
             (from i in RemoveIgnore(listValidateDTO)
              where i.InvalidBirthDate != EnumValidateType.Valid
@@ -96,11 +96,11 @@ namespace Domain.Service.Registration.Customer
              let setInvalid = i.SetInvalid()
              select InvalidBirthDate(i.InputCreate!.Code, birthDate, i.InputCreate!.FirstName)).ToList();
 
-            InvalidLengthValidation(listValidateDTO, "Code", "InputUpdate", 1, 6);
-            InvalidLengthValidation(listValidateDTO, "FirstName", "InputUpdate", 1, 100);
-            InvalidLengthValidation(listValidateDTO, "LastName", "InputUpdate", 1, 100);
-            InvalidLengthValidation(listValidateDTO, "Document", "InputUpdate", 11, 11);
-            InvalidLengthValidation(listValidateDTO, "Phone", "InputUpdate", 11, 11);
+            //InvalidLengthValidation(listValidateDTO, "Code", "InputUpdate", 1, 6);
+            //InvalidLengthValidation(listValidateDTO, "FirstName", "InputUpdate", 1, 100);
+            //InvalidLengthValidation(listValidateDTO, "LastName", "InputUpdate", 1, 100);
+            //InvalidLengthValidation(listValidateDTO, "Document", "InputUpdate", 11, 11);
+            //InvalidLengthValidation(listValidateDTO, "Phone", "InputUpdate", 11, 11);
 
             //(from i in RemoveIgnore(listCustomerValidateDTO)
             // let code = i.InputIdentityUpdateCustomer.InputUpdateCustomer.Code

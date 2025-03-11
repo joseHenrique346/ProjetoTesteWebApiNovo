@@ -34,7 +34,7 @@ namespace Domain.Service.Registration.Brand
                                                {
                                                    InputCreate = i,
                                                    ExistingCode = selectedListOriginalBrandDTO.FirstOrDefault(j => i.Code == j),
-                                                   RepeatedCode = repeatedCode.FirstOrDefault()
+                                                   RepeatedCode = repeatedCode.FirstOrDefault(j => i.Code == j.Code)
                                                }).ToList();
 
             List<BrandValidateDTO> listBrandValidateDTO = newListInputBrandToValidate.Select(i => new BrandValidateDTO().ValidateCreate(i.InputCreate, i.ExistingCode, i.RepeatedCode)).ToList();
@@ -63,16 +63,20 @@ namespace Domain.Service.Registration.Brand
                                 where listInputIdentityUpdateBrand.Count(j => j.InputUpdateBrand.Code == i.InputUpdateBrand.Code) > 1
                                 select i).ToList();
 
+            var listInputOriginalIdentifiers = listInputIdentityUpdateBrand.Select(i => i.Id).ToList();
+
             var newListBrandToValidate = (from i in listInputIdentityUpdateBrand
                                           select new
                                           {
+                                              InputIdentity = i,
                                               InputUpdate = i.InputUpdateBrand,
-                                              OriginalEntity = listOriginalBrandDTO.FirstOrDefault(j => i.Id == j.Id),
+                                              InputOriginalEntityId = listInputOriginalIdentifiers.FirstOrDefault(),
+                                              OriginalEntity = listOriginalBrandDTO.FirstOrDefault(j => i.Id == j.Id)?.Id ?? 0,
                                               ExistingCode = listOriginalBrandDTO?.FirstOrDefault(j => i.InputUpdateBrand.Code != j.Code)?.Code ?? null,
                                               RepeatedCode = repeatedCode.FirstOrDefault()
                                           }).ToList();
 
-            List<BrandValidateDTO> listBrandValidateDTO = newListBrandToValidate.Select(i => new BrandValidateDTO().ValidateUpdate(i.InputUpdate, i.OriginalEntity, i.ExistingCode, i.RepeatedCode)).ToList();
+            List<BrandValidateDTO> listBrandValidateDTO = newListBrandToValidate.Select(i => new BrandValidateDTO().ValidateUpdate(i.InputUpdate, i.OriginalEntity, i.ExistingCode, i.RepeatedCode, i.InputOriginalEntityId)).ToList();
 
             _validate.Update(listBrandValidateDTO);
 
@@ -84,9 +88,9 @@ namespace Domain.Service.Registration.Brand
             var validlistBrand = (from i in RemoveInvalid(listBrandValidateDTO) where !i.Invalid select i).ToList();
 
             (from i in validlistBrand
-             select UpdateDTO<BrandDTO, InputUpdateBrand>(i.OriginalBrand, i.InputUpdate)).ToList();
+             select UpdateDTO<BrandDTO, InputUpdateBrand>(i.OriginalEntity, i.InputUpdate)).ToList();
 
-            var originalBrandToUpdate = validlistBrand.Select(i => i.OriginalBrand).ToList();
+            var originalBrandToUpdate = validlistBrand.Select(i => i.OriginalEntity).ToList();
 
             await _repository.Update(originalBrandToUpdate);
 

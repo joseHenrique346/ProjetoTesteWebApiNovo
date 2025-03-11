@@ -14,97 +14,81 @@ namespace Domain.Service.Base
              let setInvalid = i.SetIgnore()
              select i).ToList();
         }
-        public bool InvalidLengthValidation(List<TValidateDTO> listValidateDTO, string valueString, string input, int minLeght, int maxLenght)
+
+        public bool InvalidLengthValidation(TValidateDTO validateDTO, string valueString, string input, int minLeght, int maxLenght)
         {
-            (from i in RemoveIgnore(listValidateDTO)
-             let propertyInput = i.GetType().GetProperty(input)
-             where propertyInput != null
-             let inputvalue = propertyInput.GetValue(i)
-             let property = inputvalue.GetType().GetProperty(valueString)
-             let propertyValue = property.GetValue(inputvalue).ToString()
-             let validate = InvalidLength(propertyValue, minLeght, maxLenght)
-             where validate != EnumValidateType.Valid
-             let setValidate = validate == EnumValidateType.Invalid ? i.SetInvalid() : i.SetInvalid()
-             let propertyKey = inputvalue.GetType().GetProperty("Code")
-             let keyValue = propertyKey.GetValue(inputvalue)!.ToString()
-             select validate == EnumValidateType.Invalid ? InvalidLength(keyValue, valueString, minLeght, maxLenght) : NonInformedField(keyValue, valueString)).ToList();
+            var propertyInput = validateDTO.GetType().GetProperty(input);
+            if (propertyInput != null)
+            {
+                var inputValue = propertyInput.GetValue(validateDTO);
+                var property = inputValue!.GetType().GetProperty(valueString);
+                var propertyValue = property!.GetValue(inputValue)!.ToString();
+                EnumValidateType validate = InvalidLength(propertyValue!, minLeght, maxLenght);
+                if (validate != EnumValidateType.Valid)
+                {
+                    validateDTO.SetInvalid();
+                    var propertyKey = inputValue.GetType().GetProperty("Code");
+                    var keyValue = propertyKey.GetValue(inputValue)!.ToString();
+                    bool _ = validate == EnumValidateType.Invalid ? InvalidLength(keyValue, valueString, minLeght, maxLenght) : NonInformedField(keyValue!, valueString);
+                }
+            }
             return true;
         }
-        public void AlreadyExistingCodeValidation(List<TValidateDTO> listValidateDTO, string key, string input)
+
+        public bool AlreadyExistingCodeValidation(TValidateDTO validateDTO, string key, string input)
         {
-            (from i in RemoveIgnore(listValidateDTO)
-             let existingCodeProperty = i.GetType().GetProperty("ExistingCode")
-             where existingCodeProperty != null
-             let propertyValue = existingCodeProperty.GetValue(i)
-             where propertyValue != default
-             let propertyInput = i.GetType().GetProperty(input)
-             let inputValue = propertyInput.GetValue(i)
-             let propertyKey = inputValue.GetType().GetProperty(key)
-             let keyValue = propertyKey.GetValue(inputValue)!.ToString()
-             let setInvalid = i.SetInvalid()
-             select AlreadyExists(keyValue)).ToList();
+            var existingCodeProperty = validateDTO.GetType().GetProperty("ExistingCode");
+            if (existingCodeProperty != null)
+            {
+                var propertyValue = existingCodeProperty.GetValue(validateDTO);
+                if (propertyValue != null)
+                {
+                    var propertyInput = validateDTO.GetType().GetProperty(input);
+                    var inputValue = propertyInput!.GetValue(validateDTO);
+                    var propertyKey = inputValue!.GetType().GetProperty(key);
+
+                    var keyValue = propertyKey.GetValue(inputValue)!.ToString();
+                    validateDTO.SetInvalid();
+                    AlreadyExists(keyValue!);
+                }
+            }
+            return true;
         }
 
-        public void RepeatedCodeValidation(List<TValidateDTO> listValidateDTO, string key, string input)
+        public bool RepeatedCodeValidation(TValidateDTO validateDTO, string key, string input)
         {
-            (from i in RemoveIgnore(listValidateDTO)
-             let repeatedCodeProperty = i.GetType().GetProperty("RepeatedCode")
-             where repeatedCodeProperty != null
-             let propertyValue = repeatedCodeProperty.GetValue(i)
-             where propertyValue != default
-             let propertyInput = i.GetType().GetProperty(input)
-             let inputValue = propertyInput.GetValue(i)
-             let propertyKey = inputValue.GetType().GetProperty(key)
-             let keyValue = propertyKey.GetValue(inputValue)!.ToString()
-             let setInvalid = i.SetInvalid()
-             let index = listValidateDTO.IndexOf(i)
-             select RepeatedCode(keyValue, (index + 1))).ToList();
+            var repeatedCodeProperty = validateDTO.GetType().GetProperty("RepeatedCode");
+            if (repeatedCodeProperty != null)
+            {
+                var propertyValue = repeatedCodeProperty.GetValue(validateDTO);
+                if (propertyValue != default)
+                {
+                    var propertyInput = validateDTO.GetType().GetProperty(input);
+                    var inputValue = propertyInput.GetValue(validateDTO);
+                    var propertyKey = inputValue.GetType().GetProperty(key);
+                    var keyValue = propertyKey.GetValue(inputValue)!.ToString();
+                    validateDTO.SetInvalid();
+                    RepeatedCode(keyValue);
+                }
+            }
+            return true;
         }
 
-        public void ExistingOriginalEntityValidation(List<TValidateDTO> listValidateDTO, string key, string input)
+        public bool ExistingOriginalEntityValidation(TValidateDTO validateDTO, string key)
         {
-            (from i in RemoveIgnore(listValidateDTO)
-             let existingOriginalProperty = i.GetType().GetProperty("OriginalEntity")
-             where existingOriginalProperty != null
-             let propertyValue = existingOriginalProperty.GetValue(i)
-             where propertyValue == default
-             let propertyKey = i.GetType().GetProperty(key)
-             let keyValue = propertyKey.GetValue(i)!.ToString()
-             let setInvalid = i.SetInvalid()
-             select OriginalNotFound()).ToList();
+            var existingOriginalProperty = validateDTO.GetType().GetProperty("OriginalEntity");
+            if (existingOriginalProperty != null)
+            {
+                var propertyValue = existingOriginalProperty.GetValue(validateDTO);
+                if (propertyValue == default)
+                {
+                    var propertyInputOriginalEntityId = validateDTO.GetType().GetProperty("InputOriginalEntityId");
+                    long valueInputOriginalEntityId = (long)(propertyInputOriginalEntityId?.GetValue(validateDTO) ?? 0);
+                    validateDTO.SetInvalid();
+                    OriginalNotFound(valueInputOriginalEntityId);
+                }
+            }
+            return true;
         }
     }
 }
-//public void ValidateNonInformedStringField(List<TValidateDTO> listValidateDTO, string key, string propertyName, string input)
-//{
-//    //(from i in RemoveIgnore(listValidateDTO)
-//    // let property = i.GetType().GetProperty(propertyName)
-//    // let propertyValue = property.GetValue(i)
-//    // where propertyValue == null
-//    // let setIgnore = i.SetIgnore()
-//    // let propertyKey = i.GetType().GetProperty(key)
-//    // let keyValue = propertyKey.GetValue(i)!.ToString()
-//    // select NonInformedField(keyValue, nameof(propertyValue), EnumValidateType.NonInformed)).ToList();
-//}
-
-
-//public void ValidateNonInformedLongField(List<TValidateDTO> listValidateDTO, string key, long valueLong)
-//{
-//    (from i in RemoveIgnore(listValidateDTO)
-//     let property = i.GetType().GetProperty(valueLong())
-//     let propertyValue = property.GetValue(i)
-//     where propertyValue == null
-//     let setIgnore = i.SetIgnore()
-//     select NonInformedField(key, nameof(propertyValue), EnumValidateType.NonInformed)).ToList();
-//}
-
-//public void ValidateInvalidLength(List<TValidateDTO> listValidateDTO, string key, string propertyName, int minLength, int maxLength)
-//{
-//    (from i in RemoveIgnore(listValidateDTO)
-//     let property = listValidateDTO.GetType().GetProperty(propertyName)
-//     let propertyValue = property.GetValue(i)!.ToString()
-//     let resultInvalidLength = InvalidLength(propertyValue, minLength, maxLength)
-//     where resultInvalidLength != EnumValidateType.Valid
-//     let setInvalid = i.SetInvalid()
-//     select InvalidLength(key, nameof(propertyValue), minLength, maxLength)).ToList();
-//}

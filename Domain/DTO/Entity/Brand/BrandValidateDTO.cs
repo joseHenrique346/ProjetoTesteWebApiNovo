@@ -11,6 +11,7 @@ namespace Domain.DTO.Entity.Brand
 
         public InputUpdateBrand InputUpdate { get; private set; }
         public BrandDTO OriginalEntity { get; set; }
+        public long InputOriginalEntityId { get; set; }
 
         public InputIdentityUpdateBrand InputIdentityUpdateBrand { get; private set; }
         public InputIdentityUpdateBrand? RepeatedCodeUpdate { get; private set; }
@@ -27,12 +28,13 @@ namespace Domain.DTO.Entity.Brand
             return this;
         }
 
-        public BrandValidateDTO ValidateUpdate(InputUpdateBrand inputUpdate, BrandDTO originalEntity, string? existingCode, InputIdentityUpdateBrand repeatedCodeUpdate)
+        public BrandValidateDTO ValidateUpdate(InputUpdateBrand inputUpdate, long originalEntity, string? existingCode, InputIdentityUpdateBrand repeatedCodeUpdate, long inputOriginalEntityId)
         {
             InputUpdate = inputUpdate;
-            OriginalEntity = originalEntity;
+            OriginalBrandId = originalEntity;
             ExistingCode = existingCode;
             RepeatedCodeUpdate = repeatedCodeUpdate;
+            InputOriginalEntityId = inputOriginalEntityId;
             return this;
         }
 

@@ -36,9 +36,9 @@ namespace Domain.Service.Base
             return true;
         }
 
-        public bool RepeatedCode(string key, long index)
+        public bool RepeatedCode(string key)
         {
-            CreateErrorNotification(key, NotificationMessage.RepeatedCode(key, index));
+            CreateErrorNotification(key, NotificationMessage.RepeatedCode(key));
             return true;
         }
 
@@ -88,7 +88,7 @@ namespace Domain.Service.Base
     {
         public static string InvalidLength(string name, int minLength, int maxLength) => $"*ERRO: InvalidLength* O campo '{name}' deve ter o tamanho entre {minLength} e {maxLength} caracteres!";
         public static string AlreadyExists(string key) => $"*ERRO: AlreadyExists* O campo '{key}' já é utilizado!";
-        public static string RepeatedCode(string key, long index) => $"*ERRO: RepeatedCode* O campo '{key}' na posição ({index}) foi digitado mais de uma vez na requisição";
+        public static string RepeatedCode(string key) => $"*ERRO: RepeatedCode* O campo '{key}' foi digitado mais de uma vez na requisição";
         public static string InvalidBirthDate(DateOnly? birthDate, string name) => $"*ERRO: InvalidBirthDate* A data de nascimento ({birthDate}) do(a) cliente '{name}', é inválida!";
         public static string OriginalNotFound(long id) => $"*ERRO: OriginalNotFound* O Id: '{id}' não foi encontrado como entidade original, digite corretamente!";
         public static string NonInformedField(string name) => $"*ERRO: NonInformedField* O campo '{name}' não pode ser vazio!";

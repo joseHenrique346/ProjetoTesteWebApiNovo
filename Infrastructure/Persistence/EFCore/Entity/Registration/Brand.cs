@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Persistence.EFCore.Entity.Base;
+using System.ComponentModel.DataAnnotations;
 
 namespace Infrastructure.Persistence.EFCore.Entity.Registration
 {
