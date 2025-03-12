@@ -5,7 +5,7 @@ using Domain.DTO.Entity.Category;
 
 namespace Domain.DTO.Entity.Product
 {
-    public class ProductValidateDTO : BaseValidateDTO
+    public class ProductValidateDTO : BaseValidateDTO_1<InputCreateProduct, InputUpdateProduct, InputIdentityDeleteProduct>
     {
         public InputCreateProduct InputCreateProduct { get; set; }
         public BrandDTO OriginalBrand { get; set; }

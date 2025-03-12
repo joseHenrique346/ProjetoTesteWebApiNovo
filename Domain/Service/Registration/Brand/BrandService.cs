@@ -48,7 +48,7 @@ namespace Domain.Service.Registration.Brand
             var validlistBrand = (from i in RemoveInvalid(listBrandValidateDTO) where !i.Invalid select i).ToList();
 
             var ListBrandToCreate = (from i in validlistBrand
-                                     select new BrandDTO(i.InputCreate.Code, i.InputCreate.Description)).ToList();
+                                     select new BrandDTO(i.InputCreate!.Code, i.InputCreate.Description)).ToList();
 
             var listNewBrand = await _repository.Create(ListBrandToCreate);
 
@@ -72,7 +72,7 @@ namespace Domain.Service.Registration.Brand
                                               InputUpdate = i.InputUpdateBrand,
                                               InputOriginalEntityId = listInputOriginalIdentifiers.FirstOrDefault(),
                                               OriginalEntity = listOriginalBrandDTO.FirstOrDefault(j => i.Id == j.Id)?.Id ?? 0,
-                                              ExistingCode = listOriginalBrandDTO?.FirstOrDefault(j => i.InputUpdateBrand.Code != j.Code)?.Code ?? null,
+                                              ExistingCode = listOriginalBrandDTO?.FirstOrDefault(j => i.InputUpdateBrand.Code == j.Code)?.Code ?? null,
                                               RepeatedCode = repeatedCode.FirstOrDefault()
                                           }).ToList();
 

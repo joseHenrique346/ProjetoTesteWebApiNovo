@@ -4,7 +4,7 @@ using Domain.DTO.Entity.Customer;
 
 namespace Domain.DTO.Entity.CustomerAddress
 {
-    public class CustomerAddressValidateDTO : BaseValidateDTO
+    public class CustomerAddressValidateDTO : BaseValidateDTO_1<InputCreateCustomerAddress, InputUpdateCustomerAddress, InputIdentityDeleteCustomerAddress>
     {
         public InputCreateCustomerAddress InputCreate { get; set; }
         public CustomerDTO? RelatedCustomerDTO { get; set; }

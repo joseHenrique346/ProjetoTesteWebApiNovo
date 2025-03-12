@@ -13,7 +13,7 @@ namespace Domain.Interface.Service.Base
 
         bool InvalidLength(string key, string name, int mingLength, int maxLength);
 
-        bool OriginalNotFound(long id);
+        bool OriginalNotFound(string key, long id);
 
         bool AlreadyExists(string key);
 

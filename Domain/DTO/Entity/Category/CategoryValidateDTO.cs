@@ -3,7 +3,7 @@ using Domain.DTO.Base;
 
 namespace Domain.DTO.Entity.Category
 {
-    public class CategoryValidateDTO : BaseValidateDTO
+    public class CategoryValidateDTO : BaseValidateDTO_1<InputCreateCategory, InputUpdateCategory, InputIdentityDeleteCategory>
     {
         public InputCreateCategory InputCreateCategory { get; private set; }
         public string? RepeatedCode { get; set; }

@@ -54,9 +54,9 @@ namespace Domain.Service.Base
             return true;
         }
 
-        public bool OriginalNotFound(long id)
+        public bool OriginalNotFound(string key, long id)
         {
-            CreateErrorNotification(id.ToString(), NotificationMessage.OriginalNotFound(id));
+            CreateErrorNotification(key, NotificationMessage.OriginalNotFound(id));
             return true;
         }
 

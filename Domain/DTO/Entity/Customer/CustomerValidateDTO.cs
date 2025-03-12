@@ -4,7 +4,7 @@ using Domain.DTO.Base;
 
 namespace Domain.DTO.Entity.Customer
 {
-    public class CustomerValidateDTO : BaseValidateDTO
+    public class CustomerValidateDTO : BaseValidateDTO_1<InputCreateCustomer, InputUpdateCustomer, InputIdentityDeleteCustomer>
     {
         public InputCreateCustomer InputCreate { get; private set; }
         public string ExistingCode { get; set; }

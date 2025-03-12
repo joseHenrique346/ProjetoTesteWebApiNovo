@@ -1,4 +1,5 @@
 ﻿using Arguments.Argument.Enum;
+using Arguments.Argument.Registration.Customer;
 using Domain.DTO.Entity.Customer;
 using Domain.Interface.Service.Customer;
 using Domain.Service.Base;
@@ -6,26 +7,30 @@ using Domain.Utils.Helper;
 
 namespace Domain.Service.Registration.Customer
 {
-    public class CustomerValidateService : BaseValidateService<CustomerValidateDTO>, ICustomerValidateService
+    public class CustomerValidateService : BaseValidateService<CustomerValidateDTO, InputCreateCustomer, InputUpdateCustomer, InputIdentityDeleteCustomer>, ICustomerValidateService
     {
-        public void Create(List<CustomerValidateDTO> listValidateDTO)
+        public void Create(List<CustomerValidateDTO> listCustomerValidateDTO)
         {
             NotificationBuilder.CreateDictionary();
 
-            ValidateNullDTO(listValidateDTO);
+            ValidateNullDTO(listCustomerValidateDTO);
 
-            (from i in RemoveIgnore(listValidateDTO)
+            ValidateNullInput(listCustomerValidateDTO);
+
+            ValidateNullCode(listCustomerValidateDTO);
+
+            (from i in RemoveIgnore(listCustomerValidateDTO)
              where i.ExistingCode != null
              let setInvalid = i.SetInvalid()
              select AlreadyExists(i.InputCreate!.Code)).ToList();
 
-            (from i in RemoveIgnore(listValidateDTO)
+            (from i in RemoveIgnore(listCustomerValidateDTO)
              where i.RepeatedCode != null
              let setInvalid = i.SetInvalid()
-             let index = listValidateDTO.IndexOf(i)
+             let index = listCustomerValidateDTO.IndexOf(i)
              select RepeatedCode(i.InputCreate!.Code)).ToList();
 
-            (from i in RemoveIgnore(listValidateDTO)
+            (from i in RemoveIgnore(listCustomerValidateDTO)
              where i.InvalidBirthDate != EnumValidateType.Valid
              let birthDate = i.InputCreate.BirthDate
              let setInvalid = i.SetInvalid()
@@ -73,24 +78,28 @@ namespace Domain.Service.Registration.Customer
             // select InvalidLenght(i.InputCreate.Code, resultInvalidLength, nameof(phone), 11)).ToList();
         }
 
-        public void Update(List<CustomerValidateDTO> listValidateDTO)
+        public void Update(List<CustomerValidateDTO> listCustomerValidateDTO)
         {
             NotificationBuilder.CreateDictionary();
 
-            ValidateNullDTO(listValidateDTO);
+            ValidateNullDTO(listCustomerValidateDTO);
 
-            (from i in RemoveIgnore(listValidateDTO)
+            ValidateNullInput(listCustomerValidateDTO);
+
+            ValidateNullCode(listCustomerValidateDTO);
+
+            (from i in RemoveIgnore(listCustomerValidateDTO)
              where i.ExistingCode != null
              let setInvalid = i.SetInvalid()
              select AlreadyExists(i.InputCreate!.Code)).ToList();
 
-            (from i in RemoveIgnore(listValidateDTO)
+            (from i in RemoveIgnore(listCustomerValidateDTO)
              where i.RepeatedCode != null
              let setInvalid = i.SetInvalid()
-             let index = listValidateDTO.IndexOf(i)
+             let index = listCustomerValidateDTO.IndexOf(i)
              select RepeatedCode(i.InputCreate!.Code)).ToList();
 
-            (from i in RemoveIgnore(listValidateDTO)
+            (from i in RemoveIgnore(listCustomerValidateDTO)
              where i.InvalidBirthDate != EnumValidateType.Valid
              let birthDate = i.InputIdentityUpdateCustomer.InputUpdateCustomer.BirthDate
              let setInvalid = i.SetInvalid()
