@@ -12,6 +12,8 @@ namespace Infrastructure.Persistence.EFCore.Entity.Registration
         public string Phone { get; private set; }
         public DateOnly? BirthDate { get; private set; }
         public string Document { get; private set; }
+        //[DeleteCascade]
+        //..,..
 
         #endregion
 

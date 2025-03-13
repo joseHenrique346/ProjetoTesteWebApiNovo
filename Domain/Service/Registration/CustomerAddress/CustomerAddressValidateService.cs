@@ -24,34 +24,14 @@ namespace Domain.Service.Registration.CustomerAddress
             // let setIgnore = i.SetIgnore()
             // select resultInvalidRelatedProperty).ToList();
 
-            //InvalidLengthValidation(listCustomerAddressValidateDTO, "PostalCode", "InputCreate", 1, 8);
-            //InvalidLengthValidation(listCustomerAddressValidateDTO, "Reference", "InputCreate", 0, 100);
-            //InvalidLengthValidation(listCustomerAddressValidateDTO, "Complement", "InputCreate", 0, 100);
-            //InvalidLengthValidation(listCustomerAddressValidateDTO, "Neighborhood", "InputCreate", 1, 100);
+            //Existing Code e Repeated Code
 
-            //(from i in RemoveIgnore(listCustomerAddressValidateDTO)
-            // let resultInvalidLength = InvalidLenght(i.InputCreateCustomerAddress.PostalCode, 1, 8)
-            // where resultInvalidLength != EnumValidateType.Valid
-            // let setInvalid = i.SetInvalid()
-            // select InvalidLenght(i.InputCreateCustomerAddress.Number, EnumValidateType.Invalid, nameof(i.InputCreateCustomerAddress.PostalCode), 1, 8)).ToList();
-
-            //(from i in RemoveIgnore(listCustomerAddressValidateDTO)
-            // let resultInvalidLength = InvalidLenght(i.InputCreateCustomerAddress.Reference, 0, 100)
-            // where resultInvalidLength != EnumValidateType.Valid
-            // let setInvalid = i.SetInvalid()
-            // select InvalidLenght(i.InputCreateCustomerAddress.Number, EnumValidateType.Invalid, nameof(i.InputCreateCustomerAddress.Reference), 0, 100)).ToList();
-
-            //(from i in RemoveIgnore(listCustomerAddressValidateDTO)
-            // let resultInvalidLength = InvalidLenght(i.InputCreateCustomerAddress.Complement, 0, 100)
-            // where resultInvalidLength != EnumValidateType.Valid
-            // let setInvalid = i.SetInvalid()
-            // select InvalidLenght(i.InputCreateCustomerAddress.Number, EnumValidateType.Invalid, nameof(i.InputCreateCustomerAddress.Complement), 0, 100)).ToList();
-
-            //(from i in RemoveIgnore(listCustomerAddressValidateDTO)
-            // let resultInvalidLength = InvalidLenght(i.InputCreateCustomerAddress.Neighborhood, 1, 100)
-            // where resultInvalidLength != EnumValidateType.Valid
-            // let setInvalid = i.SetInvalid()
-            // select InvalidLenght(i.InputCreateCustomerAddress.Number, EnumValidateType.Invalid, nameof(i.InputCreateCustomerAddress.Neighborhood), 1, 100)).ToList();
+            (from i in listCustomerAddressValidateDTO
+             let validateInvalidLengthPostalCode = InvalidLengthValidation(i, "PostalCode", "Code", 1, 8)
+             let validateInvalidLengthReference = InvalidLengthValidation(i, "Reference", "Code", 0, 100)
+             let validateInvalidLengthComplement = InvalidLengthValidation(i, "Complement", "Code", 0, 100)
+             let validateInvalidLengthNeighborhood = InvalidLengthValidation(i, "Neighborhood", "Code", 1, 100)
+             select true).ToList();
         }
 
         public void Update(List<CustomerAddressValidateDTO> listCustomerAddressValidateDTO)
@@ -66,42 +46,12 @@ namespace Domain.Service.Registration.CustomerAddress
 
             //existing
 
-            //(from i in listCustomerAddressValidateDTO
-            // let validateInvalidLengthPostalCode = InvalidLengthValidation(i, "PostalCode", "InputUpdate", 0, 100)
-            // ).ToList();
-
-            //InvalidLengthValidation(listCustomerAddressValidateDTO, "PostalCode", "InputUpdate", 1, 8);
-            //InvalidLengthValidation(listCustomerAddressValidateDTO, "Reference", "InputUpdate", 0, 100);
-            //InvalidLengthValidation(listCustomerAddressValidateDTO, "Complement", "InputUpdate", 0, 100);
-            //InvalidLengthValidation(listCustomerAddressValidateDTO, "Neighborhood", "InputUpdate", 1, 100);
-
-            //(from i in RemoveIgnore(listCustomerAddressValidateDTO)
-            // let inputUpdate = i.InputIdentityUpdateCustomerAddress.InputUpdateCustomerAddress
-            // let resultInvalidLength = InvalidLenght(inputUpdate.PostalCode, 1, 8)
-            // where resultInvalidLength != EnumValidateType.Valid
-            // let setInvalid = i.SetInvalid()
-            // select InvalidLenght(inputUpdate.Number, EnumValidateType.Invalid, nameof(inputUpdate.PostalCode), 1, 8)).ToList();
-
-            //(from i in RemoveIgnore(listCustomerAddressValidateDTO)
-            // let inputUpdate = i.InputIdentityUpdateCustomerAddress.InputUpdateCustomerAddress
-            // let resultInvalidLength = InvalidLenght(inputUpdate.Reference, 0, 100)
-            // where resultInvalidLength != EnumValidateType.Valid
-            // let setInvalid = i.SetInvalid()
-            // select InvalidLenght(inputUpdate.Number, EnumValidateType.Invalid, nameof(inputUpdate.Reference), 0, 100)).ToList();
-
-            //(from i in RemoveIgnore(listCustomerAddressValidateDTO)
-            // let resultInvalidLength = InvalidLenght(inputUpdate.Complement, 0, 100)
-            // where resultInvalidLength != EnumValidateType.Valid
-            // let inputUpdate = i.InputIdentityUpdateCustomerAddress.InputUpdateCustomerAddress
-            // let setInvalid = i.SetInvalid()
-            // select InvalidLenght(inputUpdate.Number, EnumValidateType.Invalid, nameof(inputUpdate.Complement), 0, 100)).ToList();
-
-            //(from i in RemoveIgnore(listCustomerAddressValidateDTO)
-            // let resultInvalidLength = InvalidLenght(inputUpdate.Neighborhood, 1, 100)
-            // let inputUpdate = i.InputIdentityUpdateCustomerAddress.InputUpdateCustomerAddress
-            // where resultInvalidLength != EnumValidateType.Valid
-            // let setInvalid = i.SetInvalid()
-            // select InvalidLenght(inputUpdate.Number, EnumValidateType.Invalid, nameof(inputUpdate.Neighborhood), 1, 100)).ToList();
+            (from i in listCustomerAddressValidateDTO
+             let validateInvalidLengthPostalCode = InvalidLengthValidation(i, "PostalCode", "Code", 1, 8)
+             let validateInvalidLengthReference = InvalidLengthValidation(i, "Reference", "Code", 0, 100)
+             let validateInvalidLengthComplement = InvalidLengthValidation(i, "Complement", "Code", 0, 100)
+             let validateInvalidLengthNeighborhood = InvalidLengthValidation(i, "Neighborhood", "Code", 1, 100)
+             select true).ToList();
         }
 
         public void Delete(List<CustomerAddressValidateDTO> listCustomerAddressValidateDTO)

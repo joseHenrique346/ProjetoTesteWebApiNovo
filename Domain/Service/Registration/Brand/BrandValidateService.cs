@@ -21,8 +21,8 @@ namespace Domain.Service.Registration.Brand
             (from i in RemoveIgnore(listBrandValidateDTO)
              let validateAlreadyExistingCode = AlreadyExistingCodeValidation(i, "Code")
              let validateRepeatedCode = RepeatedCodeValidation(i, "Code")
-             let validateInvalidLengthCode = InvalidLengthValidation(i, "Code", 1, 6)
-             let validateInvalidLengthDescription = InvalidLengthValidation(i, "Description", 1, 100)
+             let validateInvalidLengthCode = InvalidLengthValidation(i, "Code", "Code", 1, 6)
+             let validateInvalidLengthDescription = InvalidLengthValidation(i, "Description", "Code", 1, 100)
              select true).ToList();
 
             (from i in RemoveInvalid(listBrandValidateDTO)
@@ -42,13 +42,13 @@ namespace Domain.Service.Registration.Brand
             (from i in RemoveIgnore(listBrandValidateDTO)
              let validateExistingOriginalEntity = ExistingOriginalEntityValidation(i, "Code")
              let validateRepeatedCode = RepeatedCodeValidation(i, "Code")
-             let validateInvalidLengthCode = InvalidLengthValidation(i, "Code", 1, 6)
-             let validateInvalidLengthDescription = InvalidLengthValidation(i, "Description", 1, 100)
+             let validateInvalidLengthCode = InvalidLengthValidation(i, "Code", "Code", 1, 6)
+             let validateInvalidLengthDescription = InvalidLengthValidation(i, "Description", "Code", 1, 100)
              let validateAlreadyExistingCode = AlreadyExistingCodeValidation(i, "Code")
              select true).ToList();
 
             (from i in RemoveInvalid(listBrandValidateDTO)
-             select UpdateSuccessNotification(i.InputUpdate.Code, i.InputUpdate.Description)).ToList();
+             select UpdateSuccessNotification(i.InputUpdate!.Code, i.InputUpdate.Description)).ToList();
         }
 
         public void Delete(List<BrandValidateDTO> listBrandValidateDTO)

@@ -2,6 +2,7 @@
 using Arguments.Argument.Enum;
 using Domain.DTO.Base;
 using Domain.Interface.Service.Base;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Domain.Service.Base
 {
@@ -39,7 +40,7 @@ namespace Domain.Service.Base
              select i).ToList();
         }
 
-        public bool InvalidLengthValidation(TValidateDTO validateDTO, string valueString, int minLeght, int maxLenght)
+        public bool InvalidLengthValidation(TValidateDTO validateDTO, string valueString, string key, int minLeght, int maxLenght)
         {
             var inputValue = FindInput(validateDTO);
             if (inputValue != null)
@@ -50,8 +51,7 @@ namespace Domain.Service.Base
                 if (validate != EnumValidateType.Valid)
                 {
                     validateDTO.SetInvalid();
-                    var propertyKey = inputValue.GetType().GetProperty("Code");
-                    var keyValue = propertyKey.GetValue(inputValue)!.ToString();
+                    var keyValue = FindKey(inputValue, key);
                     bool _ = validate == EnumValidateType.Invalid ? InvalidLength(keyValue, valueString, minLeght, maxLenght) : NonInformedField(keyValue!, valueString);
                 }
             }
@@ -67,9 +67,7 @@ namespace Domain.Service.Base
                 if (propertyValue != null)
                 {
                     var inputValue = FindInput(validateDTO);
-                    var propertyKey = inputValue!.GetType().GetProperty(key);
-
-                    var keyValue = propertyKey.GetValue(inputValue)!.ToString();
+                    var keyValue = FindKey(inputValue, key);
                     validateDTO.SetInvalid();
                     AlreadyExists(keyValue!);
                 }
@@ -86,8 +84,7 @@ namespace Domain.Service.Base
                 if (propertyValue != default)
                 {
                     var inputValue = FindInput(validateDTO);
-                    var propertyKey = inputValue.GetType().GetProperty(key);
-                    var keyValue = propertyKey.GetValue(inputValue)!.ToString();
+                    var keyValue = FindKey(inputValue, key);
                     validateDTO.SetInvalid();
                     RepeatedCode(keyValue);
                 }
@@ -106,8 +103,7 @@ namespace Domain.Service.Base
                     var inputValue = FindInput(validateDTO);
                     var propertyInputOriginalEntityId = validateDTO.GetType().GetProperty("InputOriginalEntityId");
                     long valueInputOriginalEntityId = (long)(propertyInputOriginalEntityId?.GetValue(validateDTO) ?? 0);
-                    var propertyKey = inputValue.GetType().GetProperty(key);
-                    var keyValue = propertyKey!.GetValue(inputValue)!.ToString();
+                    var keyValue = FindKey(inputValue, key);
                     validateDTO.SetInvalid();
                     OriginalNotFound(keyValue, valueInputOriginalEntityId);
                 }
@@ -119,6 +115,12 @@ namespace Domain.Service.Base
         {
             dynamic inputValue = validateDTO.InputCreate == null ? validateDTO.InputUpdate! : validateDTO.InputCreate;
             return inputValue;
+        }
+
+        public dynamic FindKey(TValidateDTO validateDTO)
+        {
+            var identifierValue = (from i in (validateDTO).GetType().GetProperties()
+                                   where Attribute.IsDefined(i, ))
         }
     }
 }
